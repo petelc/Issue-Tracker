@@ -1,6 +1,6 @@
 {
   "name": "tracker-api",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "API for PRO MERN Stack development",
   "main": "index.js",
   "scripts": {
@@ -8,8 +8,13 @@
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petelc/Issue-Tracker.git"
+  },
   "author": "Peter Carroll <petelc1966@hotmail.com>",
   "license": "ISC",
+  "homepage": "https://github.com/petelc/Issue-Tracker",
   "dependencies": {
     "apollo-server-express": "^2.16.0",
     "dotenv": "^6.2.0",

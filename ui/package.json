@@ -14,8 +14,13 @@
     "watch": "webpack --watch",
     "test": "test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petelc/Issue-Tracker.git"
+  },
   "author": "Peter Carroll <petelc1966@hotmail.com>",
   "license": "ISC",
+  "homepage": "https://github.com/petelc/Issue-Tracker",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
