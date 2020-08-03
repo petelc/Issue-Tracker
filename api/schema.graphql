@@ -1,0 +1,50 @@
+scalar GraphQLDate
+
+enum Color {
+  Red
+  Green
+  Blue
+}
+
+enum StatusType {
+  New
+  Assigned
+  Fixed
+  Closed
+}
+
+type Query {
+  about: String!
+  issueList: [Issue!]!
+}
+type Mutation {
+  setAboutMessage(message: String!): String
+  issueAdd(issue: IssueInputs!): Issue!
+}
+
+type User {
+  name: String
+}
+
+
+type Issue {
+    _id: ID!
+    id: Int!
+    title: String!
+    status: StatusType!
+    owner: String
+    effort: Int
+    created: GraphQLDate!
+    due: GraphQLDate
+}
+
+"Toned Down Issue, used as inputs, without server generated values"
+input IssueInputs {
+  title: String!
+  "Optional, if not supplied, will be set to 'New'"
+  status: StatusType = New 
+  owner: String
+  effort: Int
+  due: GraphQLDate
+
+}

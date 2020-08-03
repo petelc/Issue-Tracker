@@ -1,0 +1,19 @@
+h1 {
+  font-style: italic;
+  font-size: 72px;
+  color: black;
+}
+table.bordered-table th,
+td {
+  border: 1px solid silver;
+  padding: 4px;
+}
+table.bordered-table {
+  border-collapse: collapse;
+}
+
+.masterContainer {
+  display: block;
+  margin-left: 1em;
+  margin-right: 1em;
+}
