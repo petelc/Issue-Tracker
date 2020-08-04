@@ -1,4 +1,8 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable import/no-cycle */
+/* eslint-disable linebreak-style */
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 /* eslint "react/jsx-no-undef": "off" */
@@ -6,7 +10,7 @@ import React from 'react';
 import CssBaseLine from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import DenseAppBar from './DenseAppBar.jsx';
+// import DenseAppBar from './DenseAppBar.jsx';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import IssueAdd from './IssueAdd.jsx';
@@ -63,7 +67,6 @@ export default withStyles(styles)(class IssueList extends React.Component {
     return (
           <React.Fragment>
             <CssBaseLine/>
-            <DenseAppBar/>
             <div>
               <Paper className={ classes.root }>
                 <h1>Issue Tracker</h1>
