@@ -17,3 +17,10 @@ table.bordered-table {
   margin-left: 1em;
   margin-right: 1em;
 }
+
+.adj {
+  margin-top: 75px;
+}
+.colorInherit {
+  color: white;
+}

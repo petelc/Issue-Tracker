@@ -10,6 +10,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -39,6 +41,13 @@ function IssueRow({ issue }) {
         <StyledTableCell align="center">{issue.effort}</StyledTableCell>
         <StyledTableCell align="center">{issue.due ? issue.due : ' '}</StyledTableCell>
         <StyledTableCell align="center">{issue.title}</StyledTableCell>
+        <StyledTableCell align="center">
+          <Link to={`/edit/${issue.id}`}>
+              <Button variant="contained" color="primary">
+                  Edit
+              </Button>
+          </Link>
+        </StyledTableCell>
       </StyledTableRow >
   );
 }
@@ -66,6 +75,7 @@ export default function IssueTable({ issues }) {
             <StyledTableCell align="center">Effort</StyledTableCell>
             <StyledTableCell align="center">Due Date</StyledTableCell>
             <StyledTableCell align="center">Title</StyledTableCell>
+            <StyledTableCell align="center">Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>{issueRows}</TableBody>

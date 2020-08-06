@@ -10,6 +10,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+// import '../public/style.css';
 
 import Contents from './Contents.jsx';
 
@@ -57,7 +60,7 @@ function NavBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar variant="dense">
           <IconButton
             edge="start"
@@ -76,9 +79,27 @@ function NavBar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}><a href="/">Home</a></MenuItem>
-            <MenuItem onClick={handleClose}><a href="/#/issues">Issue List</a></MenuItem>
-            <MenuItem onClick={handleClose}><a href="/#/report">Report</a></MenuItem>
+            <MenuItem onClick={handleClose}>
+                <Link to="/">
+                    <Button>
+                        Home
+                    </Button>
+                </Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+            <Link to="/#/issues">
+                    <Button color="secondary">
+                        Issues List
+                    </Button>
+                </Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+                <Link to="/report">
+                    <Button color="primary">
+                        Reports
+                    </Button>
+                </Link>
+            </MenuItem>
           </Menu>
           <Typography className = {classes.title } variant="h6" color="inherit">
             Issue Tracker
@@ -86,11 +107,23 @@ function NavBar() {
           <div className={classes.root}>
             <div className={classes.sectionDesktop}>
                 <nav>
-                    <a href="/">Home</a>
+                    <Link to="/">
+                        <Button variant="text" color="contrastText">
+                            Home
+                        </Button>
+                    </Link>
                     {' | '}
-                    <a href="/#/issues">Issue List</a>
+                    <Link to="/#/issues">
+                        <Button color="secondary">
+                            Issues List
+                        </Button>
+                    </Link>
                     {' | '}
-                    <a href="/#/report">Report</a>
+                    <Link to="/report">
+                        <Button color="secondary">
+                            Reports
+                        </Button>
+                    </Link>
                 </nav>
             </div>
           </div>
@@ -102,7 +135,7 @@ function NavBar() {
 
 export default function Page() {
   return (
-        <div>
+        <div className="adj">
             <NavBar/>
             <Contents />
         </div>

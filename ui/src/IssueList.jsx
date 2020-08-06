@@ -19,66 +19,68 @@ import graphQLFetch from './graphQLFetch';
 const styles = {
   root: {
     margin: 20,
-    padding: 20,
+    padding: 10,
   },
 };
 
-export default withStyles(styles)(class IssueList extends React.Component {
-  constructor() {
-    super();
-    this.state = { issues: [] };
-    this.createIssue = this.createIssue.bind(this);
-  }
+export default withStyles(styles)(
+  class IssueList extends React.Component {
+    constructor() {
+      super();
+      this.state = { issues: [] };
+      this.createIssue = this.createIssue.bind(this);
+    }
 
-  componentDidMount() {
-    this.loadData();
-  }
+    componentDidMount() {
+      this.loadData();
+    }
 
-  async loadData() {
-    const query = `query {
+    async loadData() {
+      const query = `query {
           issueList {
             id title status owner
             created effort due
           }
         }`;
-    const data = await graphQLFetch(query);
-    if (data) {
-      this.setState({ issues: data.issueList });
+      const data = await graphQLFetch(query);
+      if (data) {
+        this.setState({ issues: data.issueList });
+      }
     }
-  }
 
-  async createIssue(issue) {
-    const query = `mutation issueAdd($issue: IssueInputs!) {
+    async createIssue(issue) {
+      const query = `mutation issueAdd($issue: IssueInputs!) {
           issueAdd(issue: $issue) {
             id
           }
         }`;
 
-    const data = await graphQLFetch(query, { issue });
-    if (data) {
-      this.loadData();
+      const data = await graphQLFetch(query, { issue });
+      if (data) {
+        this.loadData();
+      }
     }
-  }
 
-  render() {
-    const { issues } = this.state;
-    // eslint-disable-next-line react/prop-types
-    const { classes } = this.props;
-    return (
-          <React.Fragment>
-            <CssBaseLine/>
-            <div>
-              <Paper className={ classes.root }>
-                <h1>Issue Tracker</h1>
-                <hr/>
-                <IssueFilter />
-                <hr />
-                <IssueTable issues = { issues } />
-                <hr />
-                <IssueAdd createIssue = { this.createIssue } />
-              </Paper>
-            </div>
-          </React.Fragment>
-    );
-  }
-});
+    render() {
+      const { issues } = this.state;
+      // eslint-disable-next-line react/prop-types
+      const { classes } = this.props;
+      return (
+        <React.Fragment>
+          <CssBaseLine />
+          <div>
+            <Paper className={classes.root}>
+              <h1>Issue Tracker</h1>
+              <hr />
+              <IssueFilter />
+              <hr />
+              <IssueTable issues={issues} />
+              <hr />
+              <IssueAdd createIssue={this.createIssue} />
+            </Paper>
+          </div>
+        </React.Fragment>
+      );
+    }
+  },
+);
