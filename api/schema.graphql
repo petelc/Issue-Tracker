@@ -1,29 +1,10 @@
 scalar GraphQLDate
 
-enum Color {
-  Red
-  Green
-  Blue
-}
-
 enum StatusType {
   New
   Assigned
   Fixed
   Closed
-}
-
-type Query {
-  about: String!
-  issueList(status: StatusType): [Issue!]!
-}
-type Mutation {
-  setAboutMessage(message: String!): String
-  issueAdd(issue: IssueInputs!): Issue!
-}
-
-type User {
-  name: String
 }
 
 type Issue {
@@ -45,4 +26,15 @@ input IssueInputs {
   owner: String
   effort: Int
   due: GraphQLDate
+}
+
+##### Top level declarations
+
+type Query {
+  about: String!
+  issueList(status: StatusType): [Issue!]!
+}
+type Mutation {
+  setAboutMessage(message: String!): String
+  issueAdd(issue: IssueInputs!): Issue!
 }
