@@ -68,8 +68,8 @@ export default function IssueFilter() {
   };
 
   return (
-      <div className="masterContainer">
-          <FormControl className={classes.margin}>
+    <div className="masterContainer">
+      <FormControl className={classes.margin}>
         <InputLabel id="demo-customized-select-label">Status</InputLabel>
         <Select
           labelId="demo-customized-select-label"
@@ -87,6 +87,6 @@ export default function IssueFilter() {
           <MenuItem value={'Closed'}>Closed</MenuItem>
         </Select>
       </FormControl>
-      </div>
+    </div>
   );
 }

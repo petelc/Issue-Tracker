@@ -26,25 +26,23 @@ type User {
   name: String
 }
 
-
 type Issue {
-    _id: ID!
-    id: Int!
-    title: String!
-    status: StatusType!
-    owner: String
-    effort: Int
-    created: GraphQLDate!
-    due: GraphQLDate
+  _id: ID!
+  id: Int!
+  title: String!
+  status: StatusType!
+  owner: String
+  effort: Int
+  created: GraphQLDate!
+  due: GraphQLDate
 }
 
 "Toned Down Issue, used as inputs, without server generated values"
 input IssueInputs {
   title: String!
   "Optional, if not supplied, will be set to 'New'"
-  status: StatusType = New 
+  status: StatusType = New
   owner: String
   effort: Int
   due: GraphQLDate
-
 }
