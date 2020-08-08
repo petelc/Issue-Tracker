@@ -10,7 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 const StyledTableCell = withStyles((theme) => ({
@@ -31,7 +31,8 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-function IssueRow({ issue }) {
+const IssueRow = withRouter(({ issue, location: { search } }) => {
+  const selectLocation = { pathname: `/issues/${issue.id}`, search };
   return (
       <StyledTableRow >
         <StyledTableCell component="th" scope="row">{issue.id}</StyledTableCell>
@@ -43,14 +44,21 @@ function IssueRow({ issue }) {
         <StyledTableCell align="center">{issue.title}</StyledTableCell>
         <StyledTableCell align="center">
           <Link to={`/edit/${issue.id}`}>
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="secondary" size="small">
                   Edit
+              </Button>
+          </Link>
+        </StyledTableCell>
+        <StyledTableCell align="center">
+        <Link to={selectLocation}>
+              <Button variant="contained" color="primary" size="small">
+                  Select
               </Button>
           </Link>
         </StyledTableCell>
       </StyledTableRow >
   );
-}
+});
 
 const useStyles = makeStyles({
   table: {
@@ -76,6 +84,7 @@ export default function IssueTable({ issues }) {
             <StyledTableCell align="center">Due Date</StyledTableCell>
             <StyledTableCell align="center">Title</StyledTableCell>
             <StyledTableCell align="center">Action</StyledTableCell>
+            <StyledTableCell align="center">Details</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>{issueRows}</TableBody>

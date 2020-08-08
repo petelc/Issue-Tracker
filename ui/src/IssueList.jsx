@@ -7,6 +7,7 @@
 /* eslint-disable linebreak-style */
 /* eslint "react/jsx-no-undef": "off" */
 import React from 'react';
+import { Route } from 'react-router-dom';
 import URLSearchParams from 'url-search-params';
 import CssBaseLine from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,6 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import IssueAdd from './IssueAdd.jsx';
+import IssueDetail from './IssueDetail.jsx';
 import graphQLFetch from './graphQLFetch';
 
 const styles = {
@@ -58,12 +60,7 @@ export default withStyles(styles)(
           created effort due
         }
       }`;
-      /* const query = `query {
-          issueList {
-            id title status owner
-            created effort due
-          }
-        }`; */
+
       const data = await graphQLFetch(query, vars);
       if (data) {
         this.setState({ issues: data.issueList });
@@ -87,7 +84,7 @@ export default withStyles(styles)(
       const { issues } = this.state;
       // eslint-disable-next-line react/prop-types
       const { classes } = this.props;
-      // const { match } = this.props;
+      const { match } = this.props;
       return (
         <React.Fragment>
           <CssBaseLine />
@@ -100,6 +97,8 @@ export default withStyles(styles)(
               <IssueTable issues={issues} />
               <hr />
               <IssueAdd createIssue={this.createIssue} />
+              <hr />
+              <Route path={`${match.path}/:id`} component={IssueDetail} />
             </Paper>
           </div>
         </React.Fragment>
