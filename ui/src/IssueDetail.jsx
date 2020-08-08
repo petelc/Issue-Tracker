@@ -41,7 +41,7 @@ const styles = {
   },
   deets: {
     margin: '5px',
-    padding: '10px',
+    padding: '20px',
     display: 'block',
   },
 };
