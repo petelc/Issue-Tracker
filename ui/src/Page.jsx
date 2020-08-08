@@ -108,7 +108,7 @@ function NavBar() {
             <div className={classes.sectionDesktop}>
                 <nav>
                     <Link to="/">
-                        <Button variant="text" color="contrastText">
+                        <Button color="secondary">
                             Home
                         </Button>
                     </Link>
