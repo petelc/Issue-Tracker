@@ -13,6 +13,7 @@ import CssBaseLine from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 // import DenseAppBar from './DenseAppBar.jsx';
+// eslint-disable-next-line import/no-named-as-default
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import IssueAdd from './IssueAdd.jsx';

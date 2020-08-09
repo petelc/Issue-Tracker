@@ -1,24 +1,19 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable linebreak-style */
-/* eslint "react/prefer-stateless-function": "off" */
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
+import URLSearchParams from 'url-search-params';
+import { withRouter } from 'react-router-dom';
+
+// Here we go with the Material UI
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import SaveIcon from '@material-ui/icons/Save';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import Select from '@material-ui/core/Select';
+import { MenuItem } from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 
 const BootstrapInput = withStyles((theme) => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
   input: {
     borderRadius: 4,
     position: 'relative',
@@ -26,7 +21,6 @@ const BootstrapInput = withStyles((theme) => ({
     border: '1px solid #ced4da',
     fontSize: 16,
     padding: '10px 26px 10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
     // Use the system font instead of the default Roboto font.
     fontFamily: [
       '-apple-system',
@@ -48,45 +42,99 @@ const BootstrapInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
-const useStyles = makeStyles((theme) => ({
-  margin: {
+const styles = (theme) => ({
+  button: {
     margin: theme.spacing(1),
   },
-}));
+});
 
-export default function IssueFilter() {
-  const classes = useStyles();
+export default withRouter(withStyles(styles)(
+  class IssueFilter extends React.Component {
+    constructor({ location: { search } }) {
+      super();
+      const params = new URLSearchParams(search);
+      this.state = {
+        status: params.get('status') || '',
+        changed: false,
+      };
+      this.onChangeStatus = this.onChangeStatus.bind(this);
+      this.ApplyFilter = this.ApplyFilter.bind(this);
+      this.showOriginalFilter = this.showOriginalFilter.bind(this);
+    }
 
-  let { status } = useParams();
-  const history = useHistory();
-  const onChangeStatus = (e) => {
-    status = e.target.value;
-    history.push({
-      pathname: '/issues',
-      search: status ? `?status=${e.target.value}` : '',
-    });
-  };
+    componentDidUpdate(prevProps) {
+      const { location: { search: prevSearch } } = prevProps;
+      const { location: { search } } = this.props;
+      if (prevSearch !== search) {
+        this.showOriginalFilter();
+      }
+    }
 
-  return (
-    <div className="masterContainer">
-      <FormControl className={classes.margin}>
-        <InputLabel id="demo-customized-select-label">Status</InputLabel>
-        <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
-          value={status}
-          onChange={onChangeStatus}
-          input={<BootstrapInput />}
-        >
-          <MenuItem value="">
-            <em>(ALL)</em>
-          </MenuItem>
-          <MenuItem value={'New'}>New</MenuItem>
-          <MenuItem value={'Assigned'}>Assigned</MenuItem>
-          <MenuItem value={'Fixed'}>Fixed</MenuItem>
-          <MenuItem value={'Closed'}>Closed</MenuItem>
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
+    onChangeStatus(e) {
+      this.setState({ status: e.target.value, changed: true });
+    }
+
+    showOriginalFilter() {
+      const { location: { search } } = this.props;
+      const params = new URLSearchParams(search);
+      this.setState({
+        status: params.get('status') || '',
+        changed: false,
+      });
+    }
+
+    ApplyFilter() {
+      const { status } = this.state;
+      const { history } = this.props;
+      history.push({
+        pathname: '/issues',
+        search: status ? `?status=${status}` : '',
+      });
+    }
+
+    render() {
+      const { status, changed } = this.state;
+      const { classes } = this.props;
+      return (
+      <div className="alignmentModel">
+          Status:
+          {' '}
+          <Select
+            value={status}
+            onChange={this.onChangeStatus}
+            input={<BootstrapInput />}
+          >
+              <MenuItem value="">(All)</MenuItem>
+              <MenuItem value="New">New</MenuItem>
+              <MenuItem value="Assigned">Assigned</MenuItem>
+              <MenuItem value="Fixed">Fixed</MenuItem>
+              <MenuItem value="Closed">Closed</MenuItem>
+          </Select>
+          {' '}
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            startIcon={<SaveIcon />}
+            onClick={this.ApplyFilter}
+          >
+            Apply
+          </Button>
+          {' '}
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            startIcon={<RefreshIcon />}
+            onClick={this.showOriginalFilter}
+            disabled={!changed}
+          >
+            Reset
+          </Button>
+      </div>
+      );
+    }
+  },
+));
