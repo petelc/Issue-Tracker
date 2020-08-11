@@ -55,8 +55,22 @@ export default withStyles(styles)(
       const params = new URLSearchParams(search);
       const vars = {};
       if (params.get('status')) vars.status = params.get('status');
-      const query = `query issueList($status: StatusType) {
-        issueList (status: $status) {
+
+      // Adding in effortMin and effortMax parameters
+      const effortMin = parseInt(params.get('effortMin'), 10);
+      if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+      const effortMax = parseInt(params.get('effortMax'), 10);
+      if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+      const query = `query issueList(
+        $status: StatusType
+        $effortMin: Int
+        $effortMax: Int
+        ) {
+        issueList (
+          status: $status
+          effortMin: $effortMin
+          effortMax: $effortMax
+          ) {
           id title status owner
           created effort due
         }

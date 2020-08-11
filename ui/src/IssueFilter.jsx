@@ -12,6 +12,11 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
+// for the text fields
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
+import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 
 const BootstrapInput = withStyles((theme) => ({
   input: {
@@ -55,11 +60,15 @@ export default withRouter(withStyles(styles)(
       const params = new URLSearchParams(search);
       this.state = {
         status: params.get('status') || '',
+        effortMin: params.get('effortMin') || '',
+        effortMax: params.get('effortMax') || '',
         changed: false,
       };
       this.onChangeStatus = this.onChangeStatus.bind(this);
       this.ApplyFilter = this.ApplyFilter.bind(this);
       this.showOriginalFilter = this.showOriginalFilter.bind(this);
+      this.onChangeEffortMin = this.onChangeEffortMin.bind(this);
+      this.onChangeEffortMax = this.onChangeEffortMax.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -74,26 +83,47 @@ export default withRouter(withStyles(styles)(
       this.setState({ status: e.target.value, changed: true });
     }
 
+    onChangeEffortMin(e) {
+      const effortString = e.target.value;
+      if (effortString.match(/^\d*$/)) {
+        this.setState({ effortMin: e.target.value, changed: true });
+      }
+    }
+
+    onChangeEffortMax(e) {
+      const effortString = e.target.value;
+      if (effortString.match(/^\d*$/)) {
+        this.setState({ effortMax: e.target.value, changed: true });
+      }
+    }
+
     showOriginalFilter() {
       const { location: { search } } = this.props;
       const params = new URLSearchParams(search);
       this.setState({
         status: params.get('status') || '',
+        effortMin: params.get('effortMin') || '',
+        effortMax: params.get('effortMax') || '',
         changed: false,
       });
     }
 
     ApplyFilter() {
-      const { status } = this.state;
+      const { status, effortMin, effortMax } = this.state;
       const { history } = this.props;
-      history.push({
-        pathname: '/issues',
-        search: status ? `?status=${status}` : '',
-      });
+
+      const params = new URLSearchParams();
+      if (status) params.set('status', status);
+      if (effortMin) params.set('effortMin', effortMin);
+      if (effortMax) params.set('effortMax', effortMax);
+
+      const search = params.toString() ? `?${params.toString()}` : '';
+      history.push({ pathname: '/issues', search });
     }
 
     render() {
       const { status, changed } = this.state;
+      const { effortMin, effortMax } = this.state;
       const { classes } = this.props;
       return (
       <div className="alignmentModel">
@@ -110,6 +140,38 @@ export default withRouter(withStyles(styles)(
               <MenuItem value="Fixed">Fixed</MenuItem>
               <MenuItem value="Closed">Closed</MenuItem>
           </Select>
+          {' '}
+          Effort Between
+          {' '}
+          <TextField
+            className={classes.margin}
+            id="mineffort"
+            label="Minimum Effort"
+            value={effortMin}
+            onChange={this.onChangeEffortMin}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <VerticalAlignBottomIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          {'  '}
+          <TextField
+            className={classes.margin}
+            id="maxeffort"
+            label="Maximum Effort"
+            value={effortMax}
+            onChange={this.onChangeEffortMax}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <VerticalAlignTopIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
           {' '}
           <Button
             variant="contained"
