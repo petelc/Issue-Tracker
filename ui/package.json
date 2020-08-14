@@ -24,6 +24,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/system": "^4.9.14",
     "babel-polyfill": "^6.26.0",
     "clsx": "^1.1.1",
     "dotenv": "^6.2.0",
@@ -31,7 +32,7 @@
     "fontsource-roboto": "^2.2.6",
     "http-proxy-middleware": "^0.21.0",
     "material-ui-popup-state": "^1.6.1",
-    "nodemon": "^1.19.4",
+    "nodemon": "^2.0.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
