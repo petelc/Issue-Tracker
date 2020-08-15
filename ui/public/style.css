@@ -45,3 +45,11 @@ select option {
   padding: 20px;
   vertical-align: middle;
 }
+
+input.invalid {
+  border-color: red;
+}
+
+div.error {
+  color: red;
+}
