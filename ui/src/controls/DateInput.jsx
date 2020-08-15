@@ -5,7 +5,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 const styles = (theme) => ({
@@ -82,7 +82,7 @@ export default withStyles(styles)(
             )}
         >
             <Input
-              id="standard-adornment-owner"
+              id={`standard-adornment-${name}`}
               name={name}
               className={className}
               value={displayValue}
@@ -95,9 +95,6 @@ export default withStyles(styles)(
                 'aria-label': `${name}`,
               }}
             />
-            <FormHelperText id={`standard-${name}-helper-text`}>
-                {name}
-            </FormHelperText>
         </FormControl>
       );
     }

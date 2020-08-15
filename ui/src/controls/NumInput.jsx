@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 // import InputAdornment from '@material-ui/core/InputAdornment';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 const styles = (theme) => ({
@@ -71,9 +71,6 @@ export default withStyles(styles)(
                 'aria-label': 'effort',
               }}
             />
-            <FormHelperText id="standard-effort-helper-text">
-              Effort
-            </FormHelperText>
           </FormControl>
       );
     }

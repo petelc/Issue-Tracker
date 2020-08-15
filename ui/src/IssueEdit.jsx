@@ -6,13 +6,9 @@ import { Link } from 'react-router-dom';
 // Handle Material UI Components
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import FilledInput from '@material-ui/core/FilledInput';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 // For the Table
@@ -30,6 +26,10 @@ import graphQLFetch from './graphQLFetch';
 // my component imports
 import NumInput from './controls/NumInput.jsx';
 import DateInput from './controls/DateInput.jsx';
+// import SmallTextInput from './controls/SmallTextInput.jsx';
+import MediumTextInput from './controls/MediumTextInput.jsx';
+import LargeTextInput from './controls/LargeTextInput.jsx';
+import XLargeTextInput from './controls/XLargeTextInput.jsx';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -55,11 +55,8 @@ const styles = (theme) => ({
     flexWrap: 'wrap',
     margin: theme.spacing(1),
   },
-  input: {
-    width: '35ch',
-  },
   select: {
-    width: '25ch',
+    width: '15ch',
     borderRadius: 4,
     position: 'relative',
     backgroundColor: theme.palette.background.paper,
@@ -213,31 +210,22 @@ export default withStyles(styles)(
             <Table className={classes.table}>
               <TableBody>
                 <StyledTableRow>
-                  <StyledTableCell>
-                    <FormControl
-                      className={clsx(
-                        classes.root,
-                        classes.input,
-                      )}
-                      size='medium'
-                    >
-                      <FilledInput
-                        id="standard-adornment-created"
-                        value={created}
-                        disabled={true}
-                        aria-describedby="standard-created-helper-text"
-                        inputProps={{
-                          'aria-label': 'created',
-                        }}
-                        size='medium'
-                      />
-                      <FormHelperText id="standard-created-helper-text">
-                        Created
-                      </FormHelperText>
-                    </FormControl>
+                  <StyledTableCell width="10%">
+                    Created
                   </StyledTableCell>
+                  <StyledTableCell>
+                    <MediumTextInput
+                      name="created"
+                      value={created}
+                      onChange={this.onChange}
+                      key={id}
+                    />
+                </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
+                  <StyledTableCell>
+                    Status
+                  </StyledTableCell>
                   <StyledTableCell>
                     <FormControl
                       className={clsx(
@@ -257,46 +245,39 @@ export default withStyles(styles)(
                         <MenuItem value="Fixed">Fixed</MenuItem>
                         <MenuItem value="Closed">Closed</MenuItem>
                       </Select>
-                      <FormHelperText id="standard-status-helper-text">
-                        Status
-                      </FormHelperText>
                     </FormControl>
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell>
-                    <FormControl
-                      className={clsx(
-                        classes.root,
-                        classes.input,
-                      )}
-                    >
-                      <Input
-                        id="standard-adornment-owner"
-                        value={owner}
-                        onChange={this.onChange}
-                        aria-describedby="standard-owner-helper-text"
-                        inputProps={{
-                          'aria-label': 'owner',
-                        }}
-                      />
-                      <FormHelperText id="standard-effort-helper-text">
-                        Owner
-                      </FormHelperText>
-                    </FormControl>
+                    Owner
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <MediumTextInput
+                      name="owner"
+                      value={owner}
+                      onChange={this.onChange}
+                      key={id}
+                    />
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
+                  <StyledTableCell>
+                    Effort
+                  </StyledTableCell>
                   <StyledTableCell>
                     <NumInput
                       name="effort"
                       value={effort}
                       onChange={this.onChange}
-                      // key={id}
+                      key={id}
                       />
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
+                  <StyledTableCell>
+                    Due
+                  </StyledTableCell>
                   <StyledTableCell>
                     <DateInput
                       name="due"
@@ -309,54 +290,38 @@ export default withStyles(styles)(
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell>
-                    <FormControl
-                      className={clsx(
-                        classes.root,
-                        classes.input,
-                      )}
-                    >
-                      <Input
-                        id="standard-adornment-title"
-                        value={title}
-                        onChange={this.onChange}
-                        aria-describedby="standard-title-helper-text"
-                        inputProps={{
-                          'aria-label': 'title',
-                        }}
-                      />
-                      <FormHelperText id="standard-title-helper-text">
-                        Title
-                      </FormHelperText>
-                    </FormControl>
+                    Title
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <LargeTextInput
+                      name="title"
+                      value={title}
+                      onChange={this.onChange}
+                      key={id}
+                    />
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell>
-                    <FormControl
-                      className={clsx(classes.margin, classes.withoutLabel)}
-                      fullWidth
-                    >
-                      <TextField
-                        id="standard-adornment-description"
-                        fullWidth
-                        multiline
-                        rows={18}
-                        variant="outlined"
-                        value={description}
-                        onChange={this.onChange}
-                        aria-describedby="standard-description-helper-text"
-                        inputProps={{
-                          'aria-label': 'description',
-                        }}
+                    Description
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <XLargeTextInput
+                      name="description"
+                      value={description}
+                      fullwidth = {false}
+                      multiline={true}
+                      rows={18}
+                      variant={'outlined'}
+                      onChange={this.onChange}
                       />
-                      <FormHelperText id="standard-description-helper-text">
-                        Description
-                      </FormHelperText>
-                    </FormControl>
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell>
+
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
                     <Button
                         variant="contained"
                         color="primary"

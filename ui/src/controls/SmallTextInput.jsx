@@ -1,10 +1,11 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable react/prop-types */
 import React from 'react';
 // Handle Material UI
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 const styles = (theme) => ({
@@ -14,7 +15,7 @@ const styles = (theme) => ({
     margin: theme.spacing(1),
   },
   input: {
-    width: '35ch',
+    width: '20ch',
   },
 });
 
@@ -47,10 +48,25 @@ export default withStyles(styles)(
 
     render() {
       const { value } = this.state;
-      const { tag = 'input', ...props } = this.props;
+      // const { tag = 'input', ...props } = this.props;
       const { classes } = this.props;
       return (
-        null
+        <FormControl
+            className={clsx(
+              classes.root,
+              classes.input,
+            )}
+        >
+        <Input
+            id={`standard-adornment-${value}`}
+            value={value}
+            disabled={true}
+            aria-describedby={`standard-${value}-helper-text`}
+            inputProps={{
+              'aria-label': { value },
+            }}
+        />
+        </FormControl>
       );
     }
   },
