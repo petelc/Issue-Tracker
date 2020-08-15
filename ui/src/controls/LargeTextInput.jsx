@@ -59,7 +59,6 @@ export default withStyles(styles)(
         <Input
             id={`standard-adornment-${value}`}
             value={value}
-            disabled={true}
             aria-describedby={`standard-${value}-helper-text`}
             inputProps={{
               'aria-label': { value },

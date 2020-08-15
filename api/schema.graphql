@@ -10,7 +10,7 @@ enum StatusType {
 type Issue {
   _id: ID!
   id: Int!
-  title: String!
+  title: String
   status: StatusType!
   owner: String
   effort: Int
@@ -38,6 +38,7 @@ input IssueUpdateInputs {
   status: StatusType
   owner: String
   effort: Int
+  created: GraphQLDate
   due: GraphQLDate
   description: String
 }

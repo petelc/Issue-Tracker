@@ -4,11 +4,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // Handle Material UI Components
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { MenuItem } from '@material-ui/core';
+// import FormControl from '@material-ui/core/FormControl';
+// import Select from '@material-ui/core/Select';
+// import { MenuItem } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 // For the Table
@@ -125,11 +125,30 @@ export default withStyles(styles)(
       }));
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
       e.preventDefault();
-      const { issue } = this.state;
-      // eslint-disable-next-line no-console
-      console.log(issue);
+      const { issue, invalidFields } = this.state;
+      if (Object.keys(invalidFields).length !== 0) return;
+
+      const query = `mutation issueUpdate(
+        $id: Int!
+        $changes: IssueUpdateInputs!
+      ) {
+        issueUpdate(
+          id: $id
+          changes: $changes
+        ) {
+          id title status owner
+          effort created due description
+        }
+      }`;
+
+      const { id, created, ...changes } = issue;
+      const data = await graphQLFetch(query, { changes, id });
+      if (data) {
+        this.setState({ issue: data.issueUpdate });
+        alert('Updated issue successfully'); // eslint-disable-line no-alert
+      }
     }
 
     onValidityChange(event, valid) {
@@ -157,16 +176,6 @@ export default withStyles(styles)(
       id = parseInt(id, 10);
       const data = await graphQLFetch(query, { id });
       this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
-      /* if (data) {
-        const { issue } = data;
-        // issue.due = issue.due ? issue.due : '';
-        issue.effort = issue.effort != null ? issue.effort.toString() : '';
-        issue.owner = issue.owner != null ? issue.owner : '';
-        issue.description = issue.description != null ? issue.description : '';
-        this.setState({ issue, invalidFields: {} });
-      } else {
-        this.setState({ issue: {}, invalidFields: {} });
-      } */
     }
 
     render() {
@@ -228,25 +237,12 @@ export default withStyles(styles)(
                     Status
                   </StyledTableCell>
                   <StyledTableCell>
-                    <FormControl
-                      className={clsx(
-                        classes.root,
-                        classes.select,
-                      )}
-                    >
-                      <Select
-                        id="standard-adornment-status"
-                        value={status}
-                        onChange={this.onChange}
-                        aria-describedby="standard-status-helper-text"
-                      >
-                        <MenuItem value="">(All)</MenuItem>
-                        <MenuItem value="New">New</MenuItem>
-                        <MenuItem value="Assigned">Assigned</MenuItem>
-                        <MenuItem value="Fixed">Fixed</MenuItem>
-                        <MenuItem value="Closed">Closed</MenuItem>
-                      </Select>
-                    </FormControl>
+                    <select name="status" value={status} onChange={this.onChange} key={id}>
+                      <option value="New">New</option>
+                      <option value="Assigned">Assigned</option>
+                      <option value="Fixed">Fixed</option>
+                      <option value="Closed">Closed</option>
+                    </select>
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
@@ -285,7 +281,7 @@ export default withStyles(styles)(
                       value={due}
                       onChange={this.onChange}
                       onValidityChange={this.onValidityChange}
-                      // key={id}
+                      key={id}
                     />
                   </StyledTableCell>
                 </StyledTableRow>
@@ -315,6 +311,7 @@ export default withStyles(styles)(
                       rows={18}
                       variant={'outlined'}
                       onChange={this.onChange}
+                      key={id}
                       />
                   </StyledTableCell>
                 </StyledTableRow>
@@ -329,6 +326,7 @@ export default withStyles(styles)(
                         size="large"
                         className={classes.button}
                         startIcon={<SaveIcon />}
+                        type="submit"
                       >
                       Apply
                     </Button>

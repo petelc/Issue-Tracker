@@ -72,7 +72,7 @@ async function update(_, { id, changes }) {
     validate(issue);
   }
   await db.collection('issues').updateOne({ id }, { $set: changes });
-  const savedIssue = await db.collection('issue').findOne({ id });
+  const savedIssue = await db.collection('issues').findOne({ id });
   return savedIssue;
 }
 
