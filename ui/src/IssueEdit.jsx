@@ -156,7 +156,8 @@ export default withStyles(styles)(
       } = this.props;
       id = parseInt(id, 10);
       const data = await graphQLFetch(query, { id });
-      if (data) {
+      this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
+      /* if (data) {
         const { issue } = data;
         // issue.due = issue.due ? issue.due : '';
         issue.effort = issue.effort != null ? issue.effort.toString() : '';
@@ -165,7 +166,7 @@ export default withStyles(styles)(
         this.setState({ issue, invalidFields: {} });
       } else {
         this.setState({ issue: {}, invalidFields: {} });
-      }
+      } */
     }
 
     render() {
