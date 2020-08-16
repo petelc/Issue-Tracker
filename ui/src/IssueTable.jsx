@@ -35,6 +35,7 @@ const IssueRow = withRouter(({
   issue,
   location: { search },
   closeIssue,
+  deleteIssue,
   index,
 }) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
@@ -48,16 +49,16 @@ const IssueRow = withRouter(({
         <StyledTableCell align="center">{issue.due ? issue.due : ' '}</StyledTableCell>
         <StyledTableCell align="center">{issue.title}</StyledTableCell>
         <StyledTableCell align="center">
-          <Link to={`/edit/${issue.id}`}>
-              <Button variant="contained" color="secondary" size="small">
-                  Edit
+          <Link to={selectLocation}>
+              <Button variant="contained" color="default" size="small">
+                  Select
               </Button>
           </Link>
         </StyledTableCell>
         <StyledTableCell align="center">
-          <Link to={selectLocation}>
+          <Link to={`/edit/${issue.id}`}>
               <Button variant="contained" color="primary" size="small">
-                  Select
+                  Edit
               </Button>
           </Link>
         </StyledTableCell>
@@ -70,6 +71,15 @@ const IssueRow = withRouter(({
               Close
           </Button>
         </StyledTableCell>
+        <StyledTableCell align="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={() => { deleteIssue(index); } }>
+              Delete
+          </Button>
+        </StyledTableCell>
       </StyledTableRow >
   );
 });
@@ -80,10 +90,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function IssueTable({ issues, closeIssue }) {
+export default function IssueTable({ issues, closeIssue, deleteIssue }) {
   const classes = useStyles();
   const issueRows = issues.map((issue, index) => (
-      <IssueRow key={issue.id} issue={issue} closeIssue={closeIssue} index={index} />
+      <IssueRow key={issue.id} issue={issue} closeIssue={closeIssue}
+       deleteIssue={deleteIssue} index={index} />
   ));
   return (
     <TableContainer component={Paper}>
@@ -97,9 +108,10 @@ export default function IssueTable({ issues, closeIssue }) {
             <StyledTableCell align="center">Effort</StyledTableCell>
             <StyledTableCell align="center">Due Date</StyledTableCell>
             <StyledTableCell align="center">Title</StyledTableCell>
-            <StyledTableCell align="center">Action</StyledTableCell>
             <StyledTableCell align="center">Details</StyledTableCell>
+            <StyledTableCell align="center">Update</StyledTableCell>
             <StyledTableCell align="center">Close</StyledTableCell>
+            <StyledTableCell align="center">Delete</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>{issueRows}</TableBody>
