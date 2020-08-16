@@ -24,7 +24,7 @@ I feel that I should talk about the issues that I had while coding and what the 
 3) Everytime I write a function like closeIssue or deleteIssue the callback does not work, It does what is was suposed to but it does not show it on the UI. But when I copy the authors code for the functions it works. Yet I cant see a difference.
 
 Here is my deleteIssue function  
-```javascript
+~~~javascript
 async deleteIssue(index) {    
       const query = `mutation issueDelete($id: Int!) {    
         issueDelete(id: $id)    
@@ -45,5 +45,29 @@ async deleteIssue(index) {
       } else {    
         this.loadData();    
       }    
-    } 
+    } ~~~
     
+
+Here is the Author's deleteIssue Function
+~~~javascript
+async deleteIssue(index) {
+    const query = `mutation issueDelete($id: Int!) {
+      issueDelete(id: $id)
+    }`;
+    const { issues } = this.state;
+    const { location: { pathname, search }, history } = this.props;
+    const { id } = issues[index];
+    const data = await graphQLFetch(query, { id });
+    if (data && data.issueDelete) {
+      this.setState((prevState) => {
+        const newList = [...prevState.issues];
+        if (pathname === `/issues/${id}`) {
+          history.push({ pathname: '/issues', search });
+        }
+        newList.splice(index, 1);
+        return { issues: newList };
+      });
+    } else {
+      this.loadData();
+    }
+  }~~~ 
