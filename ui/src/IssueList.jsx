@@ -9,9 +9,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import URLSearchParams from 'url-search-params';
-import CssBaseLine from '@material-ui/core/CssBaseline';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 // import DenseAppBar from './DenseAppBar.jsx';
 // eslint-disable-next-line import/no-named-as-default
 import IssueFilter from './IssueFilter.jsx';
@@ -20,50 +17,46 @@ import IssueAdd from './IssueAdd.jsx';
 import IssueDetail from './IssueDetail.jsx';
 import graphQLFetch from './graphQLFetch';
 
-const styles = {
-  root: {
-    margin: 20,
-    padding: 10,
-  },
-};
+export default class IssueList extends React.Component {
+  constructor() {
+    super();
+    this.state = { issues: [] };
+    this.createIssue = this.createIssue.bind(this);
+    this.closeIssue = this.closeIssue.bind(this);
+    this.deleteIssue = this.deleteIssue.bind(this);
+  }
 
-// TO DO: I need to change the way Material UI Styles are brought in
-// Look at other components for guidance
-export default withStyles(styles)(
-  class IssueList extends React.Component {
-    constructor() {
-      super();
-      this.state = { issues: [] };
-      this.createIssue = this.createIssue.bind(this);
-      this.closeIssue = this.closeIssue.bind(this);
-      this.deleteIssue = this.deleteIssue.bind(this);
-    }
+  componentDidMount() {
+    this.loadData();
+  }
 
-    componentDidMount() {
+  componentDidUpdate(prevProps) {
+    const {
+      location: { search: prevSearch },
+    } = prevProps;
+    const {
+      location: { search },
+    } = this.props;
+    if (prevSearch !== search) {
       this.loadData();
     }
+  }
 
-    componentDidUpdate(prevProps) {
-      const { location: { search: prevSearch } } = prevProps;
-      const { location: { search } } = this.props;
-      if (prevSearch !== search) {
-        this.loadData();
-      }
-    }
+  // Handle the querystring param here for Issue Filter
+  async loadData() {
+    const {
+      location: { search },
+    } = this.props;
+    const params = new URLSearchParams(search);
+    const vars = {};
+    if (params.get('status')) vars.status = params.get('status');
 
-    // Handle the querystring param here for Issue Filter
-    async loadData() {
-      const { location: { search } } = this.props;
-      const params = new URLSearchParams(search);
-      const vars = {};
-      if (params.get('status')) vars.status = params.get('status');
-
-      // Adding in effortMin and effortMax parameters
-      const effortMin = parseInt(params.get('effortMin'), 10);
-      if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
-      const effortMax = parseInt(params.get('effortMax'), 10);
-      if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
-      const query = `query issueList(
+    // Adding in effortMin and effortMax parameters
+    const effortMin = parseInt(params.get('effortMin'), 10);
+    if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+    const effortMax = parseInt(params.get('effortMax'), 10);
+    if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+    const query = `query issueList(
         $status: StatusType
         $effortMin: Int
         $effortMax: Int
@@ -78,118 +71,94 @@ export default withStyles(styles)(
         }
       }`;
 
-      const data = await graphQLFetch(query, vars);
-      if (data) {
-        this.setState({ issues: data.issueList });
-      }
+    const data = await graphQLFetch(query, vars);
+    if (data) {
+      this.setState({ issues: data.issueList });
     }
+  }
 
-    async createIssue(issue) {
-      const query = `mutation issueAdd($issue: IssueInputs!) {
+  async createIssue(issue) {
+    const query = `mutation issueAdd($issue: IssueInputs!) {
           issueAdd(issue: $issue) {
             id
           }
         }`;
 
-      const data = await graphQLFetch(query, { issue });
-      if (data) {
-        this.loadData();
-      }
+    const data = await graphQLFetch(query, { issue });
+    if (data) {
+      this.loadData();
     }
+  }
 
-    async closeIssue(index) {
-      const query = `mutation issueClose($id: Int!) {
+  async closeIssue(index) {
+    const query = `mutation issueClose($id: Int!) {
         issueUpdate(id: $id, changes: { status: Closed }) {
           id title status owner
           effort created due description
         }
       }`;
-      const { issues } = this.state;
-      const data = await graphQLFetch(query, { id: issues[index].id });
-      if (data) {
-        this.setState((prevState) => {
-          const newList = [...prevState.issues];
-          newList[index] = data.issueUpdate;
-          return { issues: newList };
-        });
-      } else {
-        this.loadData();
-      }
+    const { issues } = this.state;
+    const data = await graphQLFetch(query, { id: issues[index].id });
+    if (data) {
+      this.setState((prevState) => {
+        const newList = [...prevState.issues];
+        newList[index] = data.issueUpdate;
+        return { issues: newList };
+      });
+    } else {
+      this.loadData();
     }
+  }
 
-    /*
-    async deleteIssue(index) {
-      const query = `mutation issueDelete($id: Int!) {
-        issueDelete(id: $id)
-      }`;
-      const { issues } = this.state;
-      const { location: { pathname, search }, history } = this.props;
-      const { id } = issues[index];
-      const data = await graphQLFetch(query, { id });
-      if (data && data.issueDelete) {
-        this.setState((prevState) => {
-          const newList = [...prevState.issues];
-          if (pathname === `/issues/${id}`) {
-            history.push({ pathname: '/issues', search });
-          }
-          newList.slice(index, 1);
-          return { issues: newList };
-        });
-      } else {
-        this.loadData();
-      }
-    }
-    */
-
-    async deleteIssue(index) {
-      const query = `mutation issueDelete($id: Int!) {
+  async deleteIssue(index) {
+    const query = `mutation issueDelete($id: Int!) {
       issueDelete(id: $id)
     }`;
-      const { issues } = this.state;
-      const { location: { pathname, search }, history } = this.props;
-      const { id } = issues[index];
-      const data = await graphQLFetch(query, { id });
-      if (data && data.issueDelete) {
-        this.setState((prevState) => {
-          const newList = [...prevState.issues];
-          if (pathname === `/issues/${id}`) {
-            history.push({ pathname: '/issues', search });
-          }
-          newList.splice(index, 1);
-          return { issues: newList };
-        });
-      } else {
-        this.loadData();
-      }
+    const { issues } = this.state;
+    const {
+      location: { pathname, search },
+      history,
+    } = this.props;
+    const { id } = issues[index];
+    const data = await graphQLFetch(query, { id });
+    if (data && data.issueDelete) {
+      this.setState((prevState) => {
+        const newList = [...prevState.issues];
+        if (pathname === `/issues/${id}`) {
+          history.push({ pathname: '/issues', search });
+        }
+        newList.splice(index, 1);
+        return { issues: newList };
+      });
+    } else {
+      this.loadData();
     }
+  }
 
-    render() {
-      const { issues } = this.state;
-      // eslint-disable-next-line react/prop-types
-      const { classes } = this.props;
-      const { match } = this.props;
-      return (
-        <React.Fragment>
-          <CssBaseLine />
-          <div>
-            <Paper className={classes.root}>
-              <h1>Issue Tracker</h1>
-              <hr />
-              <IssueFilter />
-              <hr />
-              <IssueTable
-                issues={issues}
-                closeIssue={this.closeIssue}
-                deleteIssue={this.deleteIssue}
-              />
-              <hr />
-              <IssueAdd createIssue={this.createIssue} />
-              <hr />
-              <Route path={`${match.path}/:id`} component={IssueDetail} />
-            </Paper>
-          </div>
-        </React.Fragment>
-      );
-    }
-  },
-);
+  render() {
+    const { issues } = this.state;
+    // eslint-disable-next-line react/prop-types
+    const { match } = this.props;
+    return (
+      <React.Fragment>
+        <div className="container">
+          <h1 className="display-1">
+            Issue Tracker
+          </h1>
+          <hr />
+          <IssueFilter />
+          <hr />
+          <IssueTable
+            issues={issues}
+            closeIssue={this.closeIssue}
+            deleteIssue={this.deleteIssue}
+          />
+          <hr />
+          <IssueAdd createIssue={this.createIssue} />
+          <hr />
+          <Route path={`${match.path}/:id`} component={IssueDetail} />
+        </div>
+      </React.Fragment>
+    );
+  }
+}

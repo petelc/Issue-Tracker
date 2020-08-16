@@ -13,6 +13,9 @@ import Paper from '@material-ui/core/Paper';
 import { Link, withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
+// striped bordered hover variant="dark"
+// import { Glyphicon, Tooltip, OverlayTrigger } from 'react-bootstrap';
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,

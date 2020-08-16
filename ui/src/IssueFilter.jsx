@@ -3,57 +3,10 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params';
 import { withRouter } from 'react-router-dom';
+// Bootstrap
+import Button from 'react-bootstrap/Button';
 
-// Here we go with the Material UI
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import SaveIcon from '@material-ui/icons/Save';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Select from '@material-ui/core/Select';
-import { MenuItem } from '@material-ui/core';
-import InputBase from '@material-ui/core/InputBase';
-// for the text fields
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
-import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
-import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
-
-const BootstrapInput = withStyles((theme) => ({
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 26px 10px 12px',
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
-  },
-}))(InputBase);
-
-const styles = (theme) => ({
-  button: {
-    margin: theme.spacing(1),
-  },
-});
-
-export default withRouter(withStyles(styles)(
+export default withRouter(
   class IssueFilter extends React.Component {
     constructor({ location: { search } }) {
       super();
@@ -124,79 +77,42 @@ export default withRouter(withStyles(styles)(
     render() {
       const { status, changed } = this.state;
       const { effortMin, effortMax } = this.state;
-      const { classes } = this.props;
       return (
-      <div className="alignmentModel">
+      <div className="row">
           Status:
           {' '}
-          <Select
-            value={status}
-            onChange={this.onChangeStatus}
-            input={<BootstrapInput />}
+          <select value={status} onChange={this.onChangeStatus}
           >
-              <MenuItem value="">(All)</MenuItem>
-              <MenuItem value="New">New</MenuItem>
-              <MenuItem value="Assigned">Assigned</MenuItem>
-              <MenuItem value="Fixed">Fixed</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
-          </Select>
+              <option value="">(All)</option>
+              <option value="New">New</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Closed">Closed</option>
+          </select>
           {' '}
           Effort Between
           {' '}
-          <TextField
-            className={classes.margin}
-            id="mineffort"
-            label="Minimum Effort"
+          <input
+            size={5}
             value={effortMin}
             onChange={this.onChangeEffortMin}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VerticalAlignBottomIcon />
-                </InputAdornment>
-              ),
-            }}
           />
           {'  '}
-          <TextField
-            className={classes.margin}
-            id="maxeffort"
-            label="Maximum Effort"
+          <input
+            size={5}
             value={effortMax}
             onChange={this.onChangeEffortMax}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VerticalAlignTopIcon />
-                </InputAdornment>
-              ),
-            }}
           />
           {' '}
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            className={classes.button}
-            startIcon={<SaveIcon />}
-            onClick={this.ApplyFilter}
-          >
+          <Button bgStyle="primary" type="button" onClick={this.ApplyFilter}>
             Apply
           </Button>
           {' '}
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            className={classes.button}
-            startIcon={<RefreshIcon />}
-            onClick={this.showOriginalFilter}
-            disabled={!changed}
-          >
+          <Button bgStyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>
             Reset
           </Button>
       </div>
       );
     }
   },
-));
+);
