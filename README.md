@@ -71,3 +71,6 @@ async deleteIssue(index) {
       this.loadData();
     }
   } 
+  ```
+  
+  Continueing on with my issues ....
