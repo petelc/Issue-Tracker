@@ -9,8 +9,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import URLSearchParams from 'url-search-params';
-// import DenseAppBar from './DenseAppBar.jsx';
-// eslint-disable-next-line import/no-named-as-default
+import Card from 'react-bootstrap/Card';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import IssueAdd from './IssueAdd.jsx';
@@ -141,23 +140,23 @@ export default class IssueList extends React.Component {
     const { match } = this.props;
     return (
       <React.Fragment>
-        <div className="container">
-          <h1 className="display-1">
-            Issue Tracker
-          </h1>
-          <hr />
-          <IssueFilter />
-          <hr />
-          <IssueTable
-            issues={issues}
-            closeIssue={this.closeIssue}
-            deleteIssue={this.deleteIssue}
-          />
-          <hr />
-          <IssueAdd createIssue={this.createIssue} />
-          <hr />
-          <Route path={`${match.path}/:id`} component={IssueDetail} />
-        </div>
+        <div className="spacer"></div>
+        <Card className="text-left">
+          <Card.Header>Filter</Card.Header>
+          <Card.Body>
+            <IssueFilter />
+          </Card.Body>
+        </Card>
+        <hr />
+        <IssueTable
+          issues={issues}
+          closeIssue={this.closeIssue}
+          deleteIssue={this.deleteIssue}
+        />
+        <hr />
+        <IssueAdd createIssue={this.createIssue} />
+        <hr />
+        <Route path={`${match.path}/:id`} component={IssueDetail} />
       </React.Fragment>
     );
   }

@@ -6,6 +6,8 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import {
   BsPlusCircle, // BsChevronDoubleDown,
 } from 'react-icons/bs';
@@ -69,7 +71,10 @@ export default function Page() {
   return (
         <div>
             <NavBar/>
-            <Contents />
+            <Row></Row>
+            <Container fluid>
+              <Contents />
+            </Container>
             <Footer />
         </div>
   );

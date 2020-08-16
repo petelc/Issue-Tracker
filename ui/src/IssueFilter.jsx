@@ -5,6 +5,7 @@ import URLSearchParams from 'url-search-params';
 import { withRouter } from 'react-router-dom';
 // Bootstrap
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
 
 export default withRouter(
   class IssueFilter extends React.Component {
@@ -78,7 +79,7 @@ export default withRouter(
       const { status, changed } = this.state;
       const { effortMin, effortMax } = this.state;
       return (
-      <div className="row">
+      <Row>
           Status:
           {'   '}
           <select value={status} onChange={this.onChangeStatus}
@@ -111,7 +112,7 @@ export default withRouter(
           <Button bgstyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>
             Reset
           </Button>
-      </div>
+      </Row>
       );
     }
   },
