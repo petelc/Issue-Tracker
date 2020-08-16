@@ -15,6 +15,15 @@ First off let me say that the following statements do not reflect any dislike or
 
 1) I spent a lot of time solving the date issue ***see my submitted issue*** which was kinda irratating. (not enough to try another book :) )
 
+## What I wish was covered or wish I had added to the building of the Issue Tracker
+
+/* TO DO */
+This is what i personally want and does not reflect any other intentions except expressing my thoughts
+
+1) I wish testing was put in  
+  a) I should have added it to the project and ran the tests as we went along
+    1) I wonder if that would have helped me with the issues i chased around
+
 ## Issues
 I feel that I should talk about the issues that I had while coding and what the work around was. (at least what I remember)
 
