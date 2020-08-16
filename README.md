@@ -45,7 +45,7 @@ async deleteIssue(index) {
       } else {    
         this.loadData();    
       }    
-    } ```
+    } 
     
 
 Here is the Author's deleteIssue Function
