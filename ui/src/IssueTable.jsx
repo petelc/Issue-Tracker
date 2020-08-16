@@ -31,7 +31,12 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const IssueRow = withRouter(({ issue, location: { search } }) => {
+const IssueRow = withRouter(({
+  issue,
+  location: { search },
+  closeIssue,
+  index,
+}) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
   return (
       <StyledTableRow >
@@ -50,11 +55,20 @@ const IssueRow = withRouter(({ issue, location: { search } }) => {
           </Link>
         </StyledTableCell>
         <StyledTableCell align="center">
-        <Link to={selectLocation}>
+          <Link to={selectLocation}>
               <Button variant="contained" color="primary" size="small">
                   Select
               </Button>
           </Link>
+        </StyledTableCell>
+        <StyledTableCell align="center">
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => { closeIssue(index); } }>
+              Close
+          </Button>
         </StyledTableCell>
       </StyledTableRow >
   );
@@ -66,10 +80,10 @@ const useStyles = makeStyles({
   },
 });
 
-export default function IssueTable({ issues }) {
+export default function IssueTable({ issues, closeIssue }) {
   const classes = useStyles();
-  const issueRows = issues.map((issue) => (
-      <IssueRow key={issue.id} issue={issue} />
+  const issueRows = issues.map((issue, index) => (
+      <IssueRow key={issue.id} issue={issue} closeIssue={closeIssue} index={index} />
   ));
   return (
     <TableContainer component={Paper}>
@@ -85,6 +99,7 @@ export default function IssueTable({ issues }) {
             <StyledTableCell align="center">Title</StyledTableCell>
             <StyledTableCell align="center">Action</StyledTableCell>
             <StyledTableCell align="center">Details</StyledTableCell>
+            <StyledTableCell align="center">Close</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>{issueRows}</TableBody>

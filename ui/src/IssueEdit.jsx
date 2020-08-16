@@ -29,7 +29,7 @@ import DateInput from './controls/DateInput.jsx';
 // import SmallTextInput from './controls/SmallTextInput.jsx';
 import MediumTextInput from './controls/MediumTextInput.jsx';
 import LargeTextInput from './controls/LargeTextInput.jsx';
-import XLargeTextInput from './controls/XLargeTextInput.jsx';
+// import XLargeTextInput from './controls/XLargeTextInput.jsx';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -303,15 +303,12 @@ export default withStyles(styles)(
                     Description
                   </StyledTableCell>
                   <StyledTableCell>
-                    <XLargeTextInput
+                    <textarea
+                      rows={18}
+                      cols={125}
                       name="description"
                       value={description}
-                      fullwidth = {false}
-                      multiline={true}
-                      rows={18}
-                      variant={'outlined'}
                       onChange={this.onChange}
-                      key={id}
                       />
                   </StyledTableCell>
                 </StyledTableRow>
