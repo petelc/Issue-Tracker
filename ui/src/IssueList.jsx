@@ -99,14 +99,14 @@ export default withStyles(styles)(
     async closeIssue(index) {
       const query = `mutation issueClose($id: Int!) {
         issueUpdate(id: $id, changes: { status: Closed }) {
-          id title status owner 
+          id title status owner
           effort created due description
         }
       }`;
       const { issues } = this.state;
       const data = await graphQLFetch(query, { id: issues[index].id });
       if (data) {
-        this.setState = ((prevState) => {
+        this.setState((prevState) => {
           const newList = [...prevState.issues];
           newList[index] = data.issueUpdate;
           return { issues: newList };

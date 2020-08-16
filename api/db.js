@@ -20,7 +20,6 @@ async function getNextSequence(name) {
     { $inc: { current: 1 } },
     { returnOriginal: false },
   );
-  console.log(result.value.current);
   return result.value.current;
 }
 
