@@ -29,35 +29,37 @@ const IssueRow = withRouter(({
         <td component="th" scope="row" responsive="sm">{issue.id}</td>
         <td align="center" responsive="md">{issue.status}</td>
         <td align="center">{issue.owner}</td>
-        <td align="center">{issue.created}</td>
+        <td align="center">{issue.created.toDateString()}</td>
         <td align="center"responsive="sm">{issue.effort}</td>
-        <td align="center">{issue.due ? issue.due : ' '}</td>
-        <td align="center">{issue.title}</td>
-        <td align="center" responsive="lg">
+        <td align="center">{issue.due ? issue.due.toDateString() : ' '}</td>
+        <td align="center" responsive="md">{issue.title}</td>
+        <td align="center">
           <Link to={selectLocation}>
-              <Button bgStyle="default" size="small">
+              <Button size="sm">
                   <BsCheckAll/>
               </Button>
           </Link>
-          {' | '}
+        </td>
+        <td align="center">
           <Link to={`/edit/${issue.id}`}>
-              <Button size="small">
+              <Button size="sm">
                   <BsPencil/>
               </Button>
           </Link>
         </td>
-        <td align="center" responsive="lg">
+        <td align="center">
           <OverlayTrigger delayShow={1000} overlay={closeTooltip}>
             <Button
-              bsSize="small"
+              size="sm"
               onClick={() => { closeIssue(index); } }>
                 <BsFillXCircleFill/>
             </Button>
           </OverlayTrigger>
-          {' | '}
+        </td>
+        <td align="center">
           <OverlayTrigger delayShow={1000} overlay={deleteTooltip}>
             <Button
-              bsSize="small"
+              size="sm"
               onClick={() => { deleteIssue(index); } }>
                 <BsFillTrashFill />
             </Button>
@@ -74,6 +76,7 @@ export default function IssueTable({ issues, closeIssue, deleteIssue }) {
   ));
   return (
     <Table striped bordered hover responsive variant="dark">
+      <thead>
         <tr>
           <th responsive="sm">ID</th>
           <th align="center" responsive="md">Status</th>
@@ -82,10 +85,13 @@ export default function IssueTable({ issues, closeIssue, deleteIssue }) {
           <th align="center" responsive="sm">Effort</th>
           <th align="center">Due Date</th>
           <th align="center"responsive="md">Title</th>
-          <th align="center"responsive="lg">Details</th>
-          <th align="center" responsive="lg">Actions</th>
+          <th align="center">Details</th>
+          <th align="center">Update</th>
+          <th align="center">Close</th>
+          <th align="center">Delete</th>
         </tr>
-        <tbody>{issueRows}</tbody>
-      </Table>
+      </thead>
+      <tbody>{issueRows}</tbody>
+    </Table>
   );
 }

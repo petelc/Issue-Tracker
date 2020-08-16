@@ -104,11 +104,11 @@ export default withRouter(
             onChange={this.onChangeEffortMax}
           />
           {'   '}
-          <Button bgStyle="primary" type="button" onClick={this.ApplyFilter}>
+          <Button bgstyle="primary" type="button" onClick={this.ApplyFilter}>
             Apply
           </Button>
           {'   '}
-          <Button bgStyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>
+          <Button bgstyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>
             Reset
           </Button>
       </div>
