@@ -92,3 +92,5 @@ async deleteIssue(index) {
   ```
   
   Continueing on with my issues ....
+  
+  So clearly there is something going on with this as this did not merge in with the Master branch correctly.
