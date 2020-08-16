@@ -80,7 +80,7 @@ export default withRouter(
       return (
       <div className="row">
           Status:
-          {' '}
+          {'   '}
           <select value={status} onChange={this.onChangeStatus}
           >
               <option value="">(All)</option>
@@ -89,25 +89,25 @@ export default withRouter(
               <option value="Fixed">Fixed</option>
               <option value="Closed">Closed</option>
           </select>
-          {' '}
+          {'   '}
           Effort Between
-          {' '}
+          {'   '}
           <input
             size={5}
             value={effortMin}
             onChange={this.onChangeEffortMin}
           />
-          {'  '}
+          {'    '}
           <input
             size={5}
             value={effortMax}
             onChange={this.onChangeEffortMax}
           />
-          {' '}
+          {'   '}
           <Button bgStyle="primary" type="button" onClick={this.ApplyFilter}>
             Apply
           </Button>
-          {' '}
+          {'   '}
           <Button bgStyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>
             Reset
           </Button>
