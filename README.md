@@ -61,7 +61,7 @@ async deleteIssue(index) {
         this.loadData();    
       }    
     }
-    ```
+    
     
 
 Here is the Author's deleteIssue Function
@@ -87,6 +87,6 @@ async deleteIssue(index) {
       this.loadData();
     }
   } 
-  
+  ```
   
   Continueing on with my issues ....
