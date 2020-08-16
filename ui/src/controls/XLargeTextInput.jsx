@@ -52,13 +52,12 @@ export default withStyles(styles)(
       } = this.props;
       // const { tag = 'input', ...props } = this.props;
       const { classes } = this.props;
-      const inputProps = {
-        'aria-label': { value },
-      };
+
       return (
         <FormControl
             className={clsx(
               classes.root,
+              classes.input,
             )}
         >
           <TextField
@@ -71,7 +70,9 @@ export default withStyles(styles)(
             value={value}
             onChange={this.onChange}
             aria-describedby={`standard-${name}-helper-text`}
-            inputProps={inputProps}
+            inputProps={{
+              'aria-label': { value },
+            }}
           />
         </FormControl>
       );
