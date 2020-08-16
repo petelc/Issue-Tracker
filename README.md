@@ -30,7 +30,9 @@ Generally I liked the book and the way it was written. The content was presented
     1) I wonder if that would have helped me with the issues i chased around
 
 ---
+
 ## Issues
+
 I feel that I should talk about the issues that I had while coding and what the work around was. (at least what I remember)
 
 1) The Date fields, created and due, are never formatted to mm/dd/yyyy because the jsonDateReviver function always broke my code. Furthermore when ever I try to call toDateString or toISOString the code explodes and says that created.toDateString() is not a function. I think this is because when the server returns the data the dates are already date objects but I really am just throwing noodles against the wall to see what happens.
