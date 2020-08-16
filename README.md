@@ -26,7 +26,7 @@ Generally I liked the book and the way it was written. The content was presented
 *This is what i personally want and does not reflect any other intentions except expressing my thoughts*
 
 1) I wish testing was put in  
-  a) I should have added it to the project and ran the tests as we went along
+  a) I should have added it to the project and ran the tests as we went along  
     1) I wonder if that would have helped me with the issues i chased around
 
 ---
