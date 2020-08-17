@@ -141,8 +141,8 @@ export default class IssueList extends React.Component {
     return (
       <React.Fragment>
         <div className="spacer"></div>
-        <Card className="text-left">
-          <Card.Header>Filter</Card.Header>
+        <Card className="text-left bg-dark text-white">
+          <Card.Header><h5>Filter</h5></Card.Header>
           <Card.Body>
             <IssueFilter />
           </Card.Body>
