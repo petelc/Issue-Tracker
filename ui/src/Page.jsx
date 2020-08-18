@@ -58,6 +58,7 @@ function NavBar() {
 function Footer() {
   return (
     <small>
+      <hr/>
       <p className = "text-center">
         Full Source Code available at this
         {' '}
