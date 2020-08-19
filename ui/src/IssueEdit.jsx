@@ -231,7 +231,7 @@ export default class IssueEdit extends React.Component {
                 <Col sm={12}>
                 <Form.Control
                     name="due"
-                    value={due}
+                    value={due.toDateString()}
                     onChange={this.onChange}
                     onValidityChange={this.onValidityChange}
                     required
