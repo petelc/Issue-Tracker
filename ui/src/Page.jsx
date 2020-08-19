@@ -58,7 +58,6 @@ function NavBar() {
 function Footer() {
   return (
     <small>
-      <hr/>
       <p className = "text-center">
         Full Source Code available at this
         {' '}
@@ -74,6 +73,7 @@ export default function Page() {
             <NavBar/>
             <Row></Row>
             <Container fluid>
+              <div className="spacer"></div>
               <Contents />
             </Container>
             <Footer />

@@ -140,7 +140,6 @@ export default class IssueList extends React.Component {
     const { match } = this.props;
     return (
       <React.Fragment>
-        <div className="spacer"></div>
         <Card className="text-left bg-dark text-white">
           <Card.Header><h5>Filter</h5></Card.Header>
           <Card.Body>
