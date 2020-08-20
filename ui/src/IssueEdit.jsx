@@ -16,6 +16,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { LinkContainer } from 'react-router-bootstrap';
+import Alert from 'react-bootstrap/Alert';
 // Data Import
 import graphQLFetch from './graphQLFetch';
 
@@ -25,10 +26,12 @@ export default class IssueEdit extends React.Component {
     this.state = {
       issue: {},
       invalidFields: {},
+      showingValidation: false,
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
+    this.showValidation = this.showValidation.bind(this);
   }
 
   componentDidMount() {
@@ -61,6 +64,7 @@ export default class IssueEdit extends React.Component {
 
   async handleSubmit(e) {
     e.preventDefault();
+    this.showValidation();
     const { issue, invalidFields } = this.state;
     if (Object.keys(invalidFields).length !== 0) return;
 
@@ -112,6 +116,14 @@ export default class IssueEdit extends React.Component {
     this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
 
+  showValidation() {
+    this.setState({ showingValidation: true });
+  }
+
+  dismissValidation() {
+    this.setState({ showingValidation: false });
+  }
+
   render() {
     const {
       issue: { id },
@@ -137,13 +149,22 @@ export default class IssueEdit extends React.Component {
     const {
       issue: { created, due },
     } = this.state;
-    const { invalidFields } = this.state;
+    const { invalidFields, showingValidation } = this.state;
     let validationMessage;
-    if (Object.keys(invalidFields).length !== 0) {
+    if (Object.keys(invalidFields).length !== 0 && showingValidation) {
       validationMessage = (
-          <div className="error">
-            Please correct invalid fields before submitting.
-          </div>
+          <Alert variant="danger" dismissible>
+            <Alert.Heading>Danger Will Robinson!</Alert.Heading>
+            <p>
+              Please correct invalid fields before submitting.
+            </p>
+            <hr />
+            <div className="d-flex justify-content-end">
+              <Button onClick={this.dismissValidation} variant="outline-danger">
+                BAM!
+              </Button>
+            </div>
+          </Alert>
       );
     }
     return (
@@ -201,6 +222,7 @@ export default class IssueEdit extends React.Component {
                     name="owner"
                     value={owner}
                     onChange={this.onChange}
+                    key={id}
                   />
                 </Col>
               </Form.Group>
@@ -217,24 +239,28 @@ export default class IssueEdit extends React.Component {
                     name="effort"
                     value={effort}
                     onChange={this.onChange}
+                    key={id}
                   />
                 </Col>
               </Form.Group>
             </Form.Row>
             <Form.Row>
-              <Form.Group>
+            <Form.Group validationState={
+              invalidFields.due ? 'error' : null
+            }
+            >
                 <Col sm={3}>
                   <Form.Label>
                     Due
                   </Form.Label>
                 </Col>
                 <Col sm={12}>
-                <Form.Control
+                  <Form.Control
                     name="due"
-                    value={due.toDateString()}
-                    onChange={this.onChange}
                     onValidityChange={this.onValidityChange}
-                    required
+                    value={due}
+                    onChange={this.onChange}
+                    key={id}
                   />
                   <FormControl.Feedback type="invalid">
                     Please provide a Due Date
@@ -257,6 +283,7 @@ export default class IssueEdit extends React.Component {
                     name="title"
                     value={title}
                     onChange={this.onChange}
+                    key={id}
                   />
                 </Col>
               </Form.Group>
@@ -276,6 +303,7 @@ export default class IssueEdit extends React.Component {
                     name="description"
                     value={description}
                     onChange={this.onChange}
+                    key={id}
                   />
                 </Col>
               </Form.Group>
@@ -300,7 +328,14 @@ export default class IssueEdit extends React.Component {
                 </Col>
               </Form.Group>
             </Form.Row>
-            {validationMessage}
+            <Form.Row>
+              <Form.Group>
+                <Col sm={3}></Col>
+                <Col sm="auto">
+                  {validationMessage}
+                </Col>
+              </Form.Group>
+            </Form.Row>
           </Form>
         </Card.Body>
         <Card.Footer>

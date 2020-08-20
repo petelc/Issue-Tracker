@@ -31,7 +31,7 @@ const IssueRow = withRouter(({
         <td align="center">{issue.owner}</td>
         <td align="center">{issue.created.toDateString()}</td>
         <td align="center"responsive="sm">{issue.effort}</td>
-        <td align="center">{issue.due ? issue.due.toDateString() : ' '}</td>
+        <td align="center">{issue.due.toDateString() ? issue.due.toDateString() : ' '}</td>
         <td align="center" responsive="md">{issue.title}</td>
         <td align="center">
           <Link to={selectLocation}>

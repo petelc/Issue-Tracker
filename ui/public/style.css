@@ -1,13 +1,4 @@
 
-
-input.invalid {
-  border-color: red;
-}
-
-div.error {
-  color: red;
-}
-
 textarea {
   padding: 20px;
   font-family: Roboto;
