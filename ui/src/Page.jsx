@@ -2,18 +2,15 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable linebreak-style */
 import React from 'react';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import {
-  BsPlusCircle, // BsChevronDoubleDown,
-} from 'react-icons/bs';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Contents from './Contents.jsx';
+import IssueAddNavItem from './IssueAddNavItem.jsx';
 
 function NavBar() {
   return (
@@ -41,15 +38,7 @@ function NavBar() {
         </NavDropdown>
       </Nav>
       <Nav className="nav nav-dark bg-dark">
-        <Nav.Link>
-          <OverlayTrigger
-            placement="bottom"
-            delayShow={1000}
-            overlay={<Tooltip id="create-issue">Create Issue</Tooltip>}
-            >
-              <BsPlusCircle />
-            </OverlayTrigger>
-        </Nav.Link>
+        <IssueAddNavItem />
       </Nav>
     </Navbar>
   );

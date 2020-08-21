@@ -1,11 +1,21 @@
 
-textarea {
+.text-area {
   padding: 20px;
   font-family: Roboto;
   font-size: 16px;
   border-radius: 4px;
-  border-color: "#80bdff";
+  border-color: #80bdff;
   box-shadow: "0 0 0 0.2rem rgba(0,123,255,.25)";
+}
+
+.toast-header {
+  background-color: #318fb5;
+  color: #fff;
+}
+
+.toast-body {
+  background-color: #fff;
+  color: #4b5d67;
 }
 
 .masterContainer {
@@ -29,4 +39,10 @@ textarea {
 .spacer {
   padding: 20px;
   height: 2px;
+}
+
+.toast {
+  position: 'fixed';
+  bottom: 20;
+  left: 20;
 }

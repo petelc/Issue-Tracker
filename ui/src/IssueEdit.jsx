@@ -3,11 +3,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 // Bootstrap
-/*
-
-// The form import should take care of all of the
-// need form imports
-*/
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -17,21 +12,40 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { LinkContainer } from 'react-router-bootstrap';
 import Alert from 'react-bootstrap/Alert';
-// Data Import
+// Local Imports
 import graphQLFetch from './graphQLFetch';
+import Toasts from './Toasts.jsx';
+
+function format(num) {
+  return num != null ? num.toString() : '';
+}
+
+function unformat(str) {
+  const val = parseInt(str, 10);
+  return Number.isNaN(val) ? null : val;
+}
 
 export default class IssueEdit extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       issue: {},
       invalidFields: {},
+      value: format(props.value),
       showingValidation: false,
+      toastVisible: false,
+      toastMessage: ' ',
+      toastType: 'success',
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.showValidation = this.showValidation.bind(this);
+    this.showSuccess = this.showSuccess.bind(this);
+    this.showError = this.showError.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onEffortChange = this.onEffortChange.bind(this);
   }
 
   componentDidMount() {
@@ -56,10 +70,27 @@ export default class IssueEdit extends React.Component {
 
   onChange(event, naturalValue) {
     const { name, value: textValue } = event.target;
-    const value = naturalValue === undefined ? textValue : naturalValue;
+    let value;
+    if (name === 'effort') {
+      value = unformat(textValue);
+    } else {
+      value = naturalValue === undefined ? textValue : naturalValue;
+    }
     this.setState((prevState) => ({
       issue: { ...prevState.issue, [name]: value },
     }));
+  }
+
+  onBlur(e) {
+    const { onChange } = this.props;
+    const { value } = this.state;
+    onChange(e, unformat(value));
+  }
+
+  onEffortChange(e) {
+    if (e.target.value.match(/^\d*$/)) {
+      this.setState({ value: e.target.value });
+    }
   }
 
   async handleSubmit(e) {
@@ -82,10 +113,10 @@ export default class IssueEdit extends React.Component {
       }`;
 
     const { id, created, ...changes } = issue;
-    const data = await graphQLFetch(query, { changes, id });
+    const data = await graphQLFetch(query, { changes, id }, this.showError);
     if (data) {
       this.setState({ issue: data.issueUpdate });
-      alert('Updated issue successfully'); // eslint-disable-line no-alert
+      this.showSuccess('Updated Issue Successfully');
     }
   }
 
@@ -112,7 +143,7 @@ export default class IssueEdit extends React.Component {
       },
     } = this.props;
     id = parseInt(id, 10);
-    const data = await graphQLFetch(query, { id });
+    const data = await graphQLFetch(query, { id }, this.showError);
     this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
 
@@ -122,6 +153,26 @@ export default class IssueEdit extends React.Component {
 
   dismissValidation() {
     this.setState({ showingValidation: false });
+  }
+
+  showSuccess(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+      toastType: 'success',
+    });
+  }
+
+  showError(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+      toastType: 'danger',
+    });
+  }
+
+  dismissToast() {
+    this.setState({ toastVisible: false });
   }
 
   render() {
@@ -167,6 +218,7 @@ export default class IssueEdit extends React.Component {
           </Alert>
       );
     }
+    const { toastVisible, toastMessage, toastType } = this.state;
     return (
       <Card>
         <Card.Header><h3>{`Editing issue: ${id}`}</h3></Card.Header>
@@ -239,13 +291,14 @@ export default class IssueEdit extends React.Component {
                     name="effort"
                     value={effort}
                     onChange={this.onChange}
+                    onBlur={this.onBlur}
                     key={id}
                   />
                 </Col>
               </Form.Group>
             </Form.Row>
             <Form.Row>
-            <Form.Group validationState={
+            <Form.Group validationstate={
               invalidFields.due ? 'error' : null
             }
             >
@@ -257,7 +310,6 @@ export default class IssueEdit extends React.Component {
                 <Col sm={12}>
                   <Form.Control
                     name="due"
-                    onValidityChange={this.onValidityChange}
                     value={due}
                     onChange={this.onChange}
                     key={id}
@@ -343,6 +395,13 @@ export default class IssueEdit extends React.Component {
           {' | '}
           <Link to={`/edit/${id + 1}`}>Next</Link>
         </Card.Footer>
+        <Toasts
+          showing={toastVisible}
+          onDismiss={this.dismissToast}
+          type={toastType}
+        >
+          {toastMessage}
+        </Toasts>
       </Card>
 
     );
