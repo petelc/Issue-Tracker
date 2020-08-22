@@ -1,11 +1,8 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-alert */
-/* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
-/* eslint-disable linebreak-style */
 const { UserInputError } = require('apollo-server-express');
 const { getDb, getNextSequence } = require('./db.js');
 
+/** Gets data by param: id */
 async function get(_, { id }) {
   const db = getDb();
   const issue = await db.collection('issues').findOne({ id });

@@ -4,6 +4,7 @@
     },
     "rules": {
       "no-console": "off",
-      "import/extension": "off"
+      "import/extension": "off",
+      "quotes": "off"
     }
   }
