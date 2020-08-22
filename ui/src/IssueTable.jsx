@@ -2,34 +2,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 import React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import { Link, withRouter } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
+// Bootstrap
+import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table';
+import {
+  BsFillXCircleFill, BsFillTrashFill, BsPencil, BsCheckAll,
+} from 'react-icons/bs';
 
 const IssueRow = withRouter(({
   issue,
@@ -39,83 +18,80 @@ const IssueRow = withRouter(({
   index,
 }) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
+  const closeTooltip = (
+    <Tooltip id="close-tooltip" placement="top">Close Issue</Tooltip>
+  );
+  const deleteTooltip = (
+    <Tooltip id="delete-tooltip" placement="top">Delete Issue</Tooltip>
+  );
   return (
-      <StyledTableRow >
-        <StyledTableCell component="th" scope="row">{issue.id}</StyledTableCell>
-        <StyledTableCell align="center">{issue.status}</StyledTableCell>
-        <StyledTableCell align="center">{issue.owner}</StyledTableCell>
-        <StyledTableCell align="center">{issue.created}</StyledTableCell>
-        <StyledTableCell align="center">{issue.effort}</StyledTableCell>
-        <StyledTableCell align="center">{issue.due ? issue.due : ' '}</StyledTableCell>
-        <StyledTableCell align="center">{issue.title}</StyledTableCell>
-        <StyledTableCell align="center">
+      <tr>
+        <td component="th" scope="row" responsive="sm">{issue.id}</td>
+        <td align="center" responsive="md">{issue.status}</td>
+        <td align="center">{issue.owner}</td>
+        <td align="center">{issue.created.toDateString()}</td>
+        <td align="center"responsive="sm">{issue.effort}</td>
+        <td align="center">{issue.due.toDateString() ? issue.due.toDateString() : ' '}</td>
+        <td align="center" responsive="md">{issue.title}</td>
+        <td align="center">
           <Link to={selectLocation}>
-              <Button variant="contained" color="default" size="small">
-                  Select
+              <Button size="sm">
+                  <BsCheckAll/>
               </Button>
           </Link>
-        </StyledTableCell>
-        <StyledTableCell align="center">
+        </td>
+        <td align="center">
           <Link to={`/edit/${issue.id}`}>
-              <Button variant="contained" color="primary" size="small">
-                  Edit
+              <Button size="sm">
+                  <BsPencil/>
               </Button>
           </Link>
-        </StyledTableCell>
-        <StyledTableCell align="center">
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => { closeIssue(index); } }>
-              Close
-          </Button>
-        </StyledTableCell>
-        <StyledTableCell align="center">
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={() => { deleteIssue(index); } }>
-              Delete
-          </Button>
-        </StyledTableCell>
-      </StyledTableRow >
+        </td>
+        <td align="center">
+          <OverlayTrigger delayShow={1000} overlay={closeTooltip}>
+            <Button
+              size="sm"
+              onClick={() => { closeIssue(index); } }>
+                <BsFillXCircleFill/>
+            </Button>
+          </OverlayTrigger>
+        </td>
+        <td align="center">
+          <OverlayTrigger delayShow={1000} overlay={deleteTooltip}>
+            <Button
+              size="sm"
+              onClick={() => { deleteIssue(index); } }>
+                <BsFillTrashFill />
+            </Button>
+          </OverlayTrigger>
+        </td>
+      </tr >
   );
 });
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
-
 export default function IssueTable({ issues, closeIssue, deleteIssue }) {
-  const classes = useStyles();
   const issueRows = issues.map((issue, index) => (
       <IssueRow key={issue.id} issue={issue} closeIssue={closeIssue}
        deleteIssue={deleteIssue} index={index} />
   ));
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>ID</StyledTableCell>
-            <StyledTableCell align="center">Status</StyledTableCell>
-            <StyledTableCell align="center">Owner</StyledTableCell>
-            <StyledTableCell align="center">Created</StyledTableCell>
-            <StyledTableCell align="center">Effort</StyledTableCell>
-            <StyledTableCell align="center">Due Date</StyledTableCell>
-            <StyledTableCell align="center">Title</StyledTableCell>
-            <StyledTableCell align="center">Details</StyledTableCell>
-            <StyledTableCell align="center">Update</StyledTableCell>
-            <StyledTableCell align="center">Close</StyledTableCell>
-            <StyledTableCell align="center">Delete</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>{issueRows}</TableBody>
-      </Table>
-    </TableContainer>
+    <Table striped bordered hover responsive variant="dark">
+      <thead>
+        <tr>
+          <th responsive="sm">ID</th>
+          <th align="center" responsive="md">Status</th>
+          <th align="center"responsive="md">Owner</th>
+          <th align="center">Created</th>
+          <th align="center" responsive="sm">Effort</th>
+          <th align="center">Due Date</th>
+          <th align="center"responsive="md">Title</th>
+          <th align="center">Details</th>
+          <th align="center">Update</th>
+          <th align="center">Close</th>
+          <th align="center">Delete</th>
+        </tr>
+      </thead>
+      <tbody>{issueRows}</tbody>
+    </Table>
   );
 }

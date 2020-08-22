@@ -4,52 +4,22 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+
 import graphQLFetch from './graphQLFetch';
+import Toasts from './Toasts.jsx';
 
-/*
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import DescriptionTwoToneIcon from '@material-ui/icons/DescriptionTwoTone';
-
-*/
-
-const styles = {
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 18,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  deets: {
-    margin: '5px',
-    padding: '20px',
-    display: 'block',
-  },
-};
-
-export default withStyles(styles)(class IssueDetail extends React.Component {
+export default class IssueDetail extends React.Component {
   constructor() {
     super();
-    this.state = { issue: {} };
+    this.state = {
+      issue: {},
+      toastVisible: false,
+      toastMessage: ' ',
+      toastType: 'info',
+    };
+
+    this.showError = this.showError.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   componentDidMount() {
@@ -72,7 +42,7 @@ export default withStyles(styles)(class IssueDetail extends React.Component {
           }
       }`;
 
-    const data = await graphQLFetch(query, { id: parseInt(id) });
+    const data = await graphQLFetch(query, { id: parseInt(id) }, this.showError);
     if (data) {
       this.setState({ issue: data.issue });
     } else {
@@ -80,28 +50,33 @@ export default withStyles(styles)(class IssueDetail extends React.Component {
     }
   }
 
+  showError(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+      toastType: 'danger',
+    });
+  }
+
+  dismissToast() {
+    this.setState({ toastVisible: false });
+  }
+
   render() {
     const { issue: { description } } = this.state;
-    const { classes } = this.props;
-    // eslint-disable-next-line no-console
-    // console.log(description);
+    const { toastVisible, toastMessage, toastType } = this.state;
     return (
-        <div>
-            <Card className={classes.root} variant="outlined">
-                <CardContent>
-                    <Typography className={classes.title} gutterBottom>
-                        Description
-                    </Typography>
-                    <Divider/>
-                    <Typography className={classes.deets} variant="body2" component="pre">
-                        { description }
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
-                </Card>
-        </div>
+      <div className="text-area">
+      <h3>Description</h3>
+      <pre>{description}</pre>
+      <Toasts
+          showing={toastVisible}
+          onDismiss={this.dismissToast}
+          type={toastType}
+        >
+          {toastMessage}
+        </Toasts>
+    </div>
     );
   }
-});
+}

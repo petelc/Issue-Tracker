@@ -17,7 +17,7 @@ Generally I liked the book and the way it was written. The content was presented
 
 *First off let me say that the following statements do not reflect any dislike or other negative contention on my part*
 
-1) I spent a lot of time solving the date issue ***see my submitted issue*** which was kinda irratating. (not enough to try another book :) )
+1) I spent a lot of time solving the date issue ***see my submitted issue*** which was kinda irritating. (not enough to try another book :) )
 
 ---
 
@@ -31,6 +31,14 @@ Generally I liked the book and the way it was written. The content was presented
 
 ---
 
+## Changes to what i have been working with
+
+*This is solely a shift in UI Libraries*
+
+I had decided to use React Material-UI. I have to say that i did like it for the most part. I did have to do a lot of work to make it work within the current project.
+
+I have decided to shift gears and remove the Material-UI code and replace it with bootstrap which is covered in the book and I am already somewhat familiar with it.
+
 ## Issues
 
 I feel that I should talk about the issues that I had while coding and what the work around was. (at least what I remember)
@@ -38,7 +46,7 @@ I feel that I should talk about the issues that I had while coding and what the 
 1) The Date fields, created and due, are never formatted to mm/dd/yyyy because the jsonDateReviver function always broke my code. Furthermore when ever I try to call toDateString or toISOString the code explodes and says that created.toDateString() is not a function. I think this is because when the server returns the data the dates are already date objects but I really am just throwing noodles against the wall to see what happens.
 
 2) Currently I am in Chapter10 just completed the Update API section. The code works per se in that the issue updates when running the mutation in the graphql playground but it returns an error stating "message": "Cannot return null for non-nullable field Mutation.issueUpdate.", So hopefully when i update the UI part this doesn't cause me a lot of grief.  
-3) Everytime I write a function like closeIssue or deleteIssue the callback does not work, It does what is was suposed to but it does not show it on the UI. But when I copy the authors code for the functions it works. Yet I cant see a difference.
+3) Every time I write a function like closeIssue or deleteIssue the callback does not work, It does what is was supposed to but it does not show it on the UI. But when I copy the authors code for the functions it works. Yet I cant see a difference.
 
 Here is my deleteIssue function  
 ```javascript
@@ -91,6 +99,6 @@ async deleteIssue(index) {
   } 
   ```
   
-  Continueing on with my issues ....
+  ## BOOTSTRAP implementation thoughts
+
   
-  So clearly there is something going on with this as this did not merge in with the Master branch correctly.
