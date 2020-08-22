@@ -1,11 +1,11 @@
 {
   "name": "tracker",
-  "version": "1.5.1",
+  "version": "2.5.1",
   "description": "Application UI for PRO MERN Stack development",
   "main": "index.js",
   "scripts": {
     "#start": "UI Server. HMR is enabled in dev mode",
-    "start": "nodemon -w uiserver -w .env uiserver.js",
+    "start": "nodemon -w uiserver -w .env server/uiserver.js",
     "#lint": "Runs ESLint on all relevant files",
     "lint": "eslint . --ext js,jsx --ignore-pattern public",
     "#compile": "Generates JS bundles for production. Use with start",

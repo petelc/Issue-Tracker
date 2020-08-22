@@ -47,7 +47,7 @@ function NavBar() {
 function Footer() {
   return (
     <small>
-      <p className = "text-center">
+      <p className="text-center">
         Full Source Code available at this
         {' '}
         <a href="https://github.com/petelc/Issue-Tracker">GitHub Repository</a>
@@ -58,14 +58,14 @@ function Footer() {
 
 export default function Page() {
   return (
-        <div>
-            <NavBar/>
-            <Row></Row>
-            <Container fluid>
-              <div className="spacer"></div>
-              <Contents />
-            </Container>
-            <Footer />
-        </div>
+    <div>
+      <NavBar />
+      <Row />
+      <Container fluid>
+        <div className="spacer" />
+        <Contents />
+      </Container>
+      <Footer />
+    </div>
   );
 }

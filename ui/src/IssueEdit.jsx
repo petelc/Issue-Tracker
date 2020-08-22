@@ -13,7 +13,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { LinkContainer } from 'react-router-bootstrap';
 import Alert from 'react-bootstrap/Alert';
 // Local Imports
-import graphQLFetch from './graphQLFetch';
+import graphQLFetch from './graphQLFetch.js';
 import Toasts from './Toasts.jsx';
 
 function format(num) {
@@ -93,6 +93,15 @@ export default class IssueEdit extends React.Component {
     }
   }
 
+  onValidityChange(event, valid) {
+    const { name } = event.target;
+    this.setState((prevState) => {
+      const invalidFields = { ...prevState.invalidFields, [name]: !valid };
+      if (valid) delete invalidFields[name];
+      return { invalidFields };
+    });
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
     this.showValidation();
@@ -118,15 +127,6 @@ export default class IssueEdit extends React.Component {
       this.setState({ issue: data.issueUpdate });
       this.showSuccess('Updated Issue Successfully');
     }
-  }
-
-  onValidityChange(event, valid) {
-    const { name } = event.target;
-    this.setState((prevState) => {
-      const invalidFields = { ...prevState.invalidFields, [name]: !valid };
-      if (valid) delete invalidFields[name];
-      return { invalidFields };
-    });
   }
 
   async loadData() {
@@ -204,18 +204,18 @@ export default class IssueEdit extends React.Component {
     let validationMessage;
     if (Object.keys(invalidFields).length !== 0 && showingValidation) {
       validationMessage = (
-          <Alert variant="danger" dismissible>
-            <Alert.Heading>Danger Will Robinson!</Alert.Heading>
-            <p>
-              Please correct invalid fields before submitting.
-            </p>
-            <hr />
-            <div className="d-flex justify-content-end">
-              <Button onClick={this.dismissValidation} variant="outline-danger">
-                BAM!
-              </Button>
-            </div>
-          </Alert>
+        <Alert variant="danger" dismissible>
+          <Alert.Heading>Danger Will Robinson!</Alert.Heading>
+          <p>
+            Please correct invalid fields before submitting.
+          </p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button onClick={this.dismissValidation} variant="outline-danger">
+              BAM!
+            </Button>
+          </div>
+        </Alert>
       );
     }
     const { toastVisible, toastMessage, toastType } = this.state;
@@ -287,7 +287,7 @@ export default class IssueEdit extends React.Component {
                   </Form.Label>
                 </Col>
                 <Col sm={9}>
-                <Form.Control
+                  <Form.Control
                     name="effort"
                     value={effort}
                     onChange={this.onChange}
@@ -298,10 +298,10 @@ export default class IssueEdit extends React.Component {
               </Form.Group>
             </Form.Row>
             <Form.Row>
-            <Form.Group validationstate={
+              <Form.Group validationstate={
               invalidFields.due ? 'error' : null
             }
-            >
+              >
                 <Col sm={3}>
                   <Form.Label>
                     Due
@@ -349,7 +349,7 @@ export default class IssueEdit extends React.Component {
                 </Col>
                 <Col sm="auto">
                   <Form.Control
-                    as = "textarea"
+                    as="textarea"
                     rows={12}
                     cols={125}
                     name="description"
@@ -362,7 +362,7 @@ export default class IssueEdit extends React.Component {
             </Form.Row>
             <Form.Row>
               <Form.Group>
-                <Col sm="auto"></Col>
+                <Col sm="auto" />
                 <Col className="mr-auto" sm="auto">
                   <ButtonToolbar>
                     <ButtonGroup className="mr-2">
@@ -382,7 +382,7 @@ export default class IssueEdit extends React.Component {
             </Form.Row>
             <Form.Row>
               <Form.Group>
-                <Col sm={3}></Col>
+                <Col sm={3} />
                 <Col sm="auto">
                   {validationMessage}
                 </Col>

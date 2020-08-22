@@ -9,12 +9,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 // import './style.css';
 
 // import IssueList from './IssueList.jsx';
-import Page from './Page.jsx';
+import Page from '../src/Page.jsx';
 
 // const element = <IssueList />;
 const element = (
   <Router>
-    <Page/>
+    <Page />
   </Router>
 );
 

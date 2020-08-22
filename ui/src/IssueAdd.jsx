@@ -30,16 +30,16 @@ export default class IssueAdd extends React.Component {
   render() {
     return (
       <div>
-        <Form inline name="issueAdd" onSubmit={ this.handleSubmit }>
+        <Form inline name="issueAdd" onSubmit={this.handleSubmit}>
           <Form.Group>
             <Form.Label className="my-1 mr-2">Owner:</Form.Label>
             {' '}
-            <Form.Control type="text" name="owner" className="my-1 mr-sm-2"/>
+            <Form.Control type="text" name="owner" className="my-1 mr-sm-2" />
           </Form.Group>
           <Form.Group>
             <Form.Label className="my-1 mr-2">Title:</Form.Label>
             {' '}
-            <Form.Control type="text" name="title" className="my-1 mr-sm-2"/>
+            <Form.Control type="text" name="title" className="my-1 mr-sm-2" />
           </Form.Group>
           <Button variant="primary" type="submit" className="my-1">Add</Button>
         </Form>
