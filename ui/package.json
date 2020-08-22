@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "#start": "UI Server. HMR is enabled in dev mode",
-    "start": "nodemon -w uiserver -w .env server/uiserver.js",
+    "start": "nodemon -w dist -w .env dist/server.js",
     "#lint": "Runs ESLint on all relevant files",
-    "lint": "eslint . --ext js,jsx --ignore-pattern public",
+    "lint": "eslint server src browser --ext js,jsx",
     "#compile": "Generates JS bundles for production. Use with start",
     "compile": "webpack --mode production",
     "#watch": "Compile, and recompile on any changes.",
@@ -22,9 +22,6 @@
   "license": "ISC",
   "homepage": "https://github.com/petelc/Issue-Tracker",
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/system": "^4.9.14",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.5.2",
     "clsx": "^1.1.1",
@@ -32,7 +29,6 @@
     "express": "^4.17.1",
     "fontsource-roboto": "^2.2.6",
     "http-proxy-middleware": "^0.21.0",
-    "material-ui-popup-state": "^1.6.1",
     "nodemon": "^2.0.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -41,6 +37,7 @@
     "react-icons": "^3.10.0",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.2.0",
+    "source-map-support": "^0.5.19",
     "url-search-params": "^1.1.0",
     "whatwg-fetch": "^3.4.0"
   },
@@ -60,6 +57,7 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^3.7.2",
-    "webpack-hot-middleware": "^2.25.0"
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-node-externals": "^2.5.1"
   }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-function template(body) {
+export default function template(body) {
   return `<!DOCTYPE HTML>
   <html>
   <head>
@@ -19,5 +19,3 @@ function template(body) {
   </html>
   `;
 }
-
-module.exports = template;

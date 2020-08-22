@@ -1,17 +1,17 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-console */
 /* eslint-disable linebreak-style */
-
-require('dotenv').config();
-const path = require('path');
-
-const proxy = require('http-proxy-middleware');
-
-const express = require('express');
-
-const render = require('./render.js');
+import dotenv from 'dotenv';
+import path from 'path';
+import proxy from 'http-proxy-middleware';
+import sourceMapSupport from 'source-map-support';
+import express from 'express';
+// eslint-disable-next-line import/extensions
+import render from './render.jsx';
 
 const app = express();
+sourceMapSupport.install();
+dotenv.config();
 
 const enableHMR = (process.env.ENABLE_HMR || 'true') === 'true';
 if (enableHMR && (process.env.NODE_ENV !== 'production')) {
@@ -22,7 +22,7 @@ if (enableHMR && (process.env.NODE_ENV !== 'production')) {
   const devMiddleware = require('webpack-dev-middleware');
   const hotMiddleware = require('webpack-hot-middleware');
 
-  const config = require('../webpack.config.js');
+  const config = require('../webpack.config.js')[0];
   config.entry.app.push('webpack-hot-middleware/client');
   config.plugins = config.plugins || [];
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
