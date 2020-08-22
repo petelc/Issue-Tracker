@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "#start": "UI Server. HMR is enabled in dev mode",
-    "start": "nodemon -w dist -w .env dist/server.js",
+    "start": "node dist/server.js",
     "#lint": "Runs ESLint on all relevant files",
     "lint": "eslint server src browser --ext js,jsx",
     "#compile": "Generates JS bundles for production. Use with start",
@@ -14,7 +14,6 @@
     "watch-server-hmr": "webpack -w --config webpack.serverHMR.js",
     "#dev-all": "Dev-Mode: uses concurrently to run 2 commands at once",
     "dev-all": "npm run watch-server-hmr & timeout 5 && npm start"
-    
   },
   "repository": {
     "type": "git",
