@@ -26,6 +26,9 @@ function NavBar() {
         <LinkContainer to="/report">
           <Nav.Link>Report</Nav.Link>
         </LinkContainer>
+        <LinkContainer to="/about">
+          <Nav.Link>About</Nav.Link>
+        </LinkContainer>
         <NavDropdown
           id="user-dropdown"
           title="More"
