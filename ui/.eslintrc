@@ -3,7 +3,6 @@
     "rules": {
         "no-console": "off",
         "linebreak-style": "off",
-        "no-alert": "off",
-        "quotes": "off"
+        "no-alert": "off"
     }
 }
