@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
+const webpack = require('webpack');
 
 const browserConfig = {
   mode: "development",
@@ -45,6 +46,11 @@ const browserConfig = {
       chunks: "all",
     },
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      _isBrowser_: 'true',
+    }),
+  ],
   devtool: "source-map",
 };
 
@@ -79,6 +85,11 @@ const serverConfig = {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      _isBrowser_: 'false',
+    }),
+  ],
   devtool: "source-map",
 };
 
