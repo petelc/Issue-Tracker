@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "06d226d51e24a3918d0b";
+/******/ 	var hotCurrentHash = "6dbf46504cc09b3349e1";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1014,7 +1014,8 @@ async function render(req, res) {
   let initialData;
 
   if (activeRoute && activeRoute.component.fetchData) {
-    initialData = await activeRoute.component.fetchData();
+    const match = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["matchPath"])(req.path, activeRoute);
+    initialData = await activeRoute.component.fetchData(match);
   }
 
   _src_store_js__WEBPACK_IMPORTED_MODULE_5__["default"].initialData = initialData;
@@ -1187,6 +1188,7 @@ class About extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
     super(props);
     const apiAbout = _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialData.about : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialData;
     this.state = {
       apiAbout
     };
@@ -1586,8 +1588,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_bootstrap__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_router_bootstrap__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var react_bootstrap_Alert__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap/Alert */ "react-bootstrap/Alert");
 /* harmony import */ var react_bootstrap_Alert__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Alert__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
-/* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! prop-types */ "prop-types");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
+/* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* eslint-disable no-undef */
+
 /* eslint-disable linebreak-style */
 
 /* eslint-disable react/prop-types */
@@ -1602,7 +1609,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
  // Local Imports
+
 
 
 
@@ -1617,12 +1626,33 @@ function unformat(str) {
 }
 
 class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
-  constructor(props) {
-    super(props);
+  static async fetchData(match, showError) {
+    const query = `query issue($id: Int!) {
+      issue(id: $id) {
+        id title status owner
+        effort created due description
+      }
+    }`;
+    let {
+      params: {
+        id
+      }
+    } = match;
+    id = parseInt(id, 10);
+    const result = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_12__["default"])(query, {
+      id
+    }, showError);
+    return result;
+  }
+
+  constructor() {
+    super();
+    const issue = _store_js__WEBPACK_IMPORTED_MODULE_14__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_14__["default"].initialData.issue : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_14__["default"].initialData;
     this.state = {
-      issue: {},
+      issue,
       invalidFields: {},
-      value: format(props.value),
+      value: format(prop_types__WEBPACK_IMPORTED_MODULE_11___default.a.value),
       showingValidation: false,
       toastVisible: false,
       toastMessage: ' ',
@@ -1640,7 +1670,10 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    const {
+      issue
+    } = this.state;
+    if (issue == null) this.loadData();
   }
 
   componentDidUpdate(prevProps) {
@@ -1742,7 +1775,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       created,
       ...changes
     } = issue;
-    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_11__["default"])(query, {
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_12__["default"])(query, {
       changes,
       id
     }, this.showError);
@@ -1756,28 +1789,34 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   async loadData() {
+    const {
+      match
+    } = this.props;
+    const data = await IssueEdit.fetchData(match, this.showError);
+    this.setState({
+      issue: data ? data.issue : {},
+      invalidFields: {}
+    });
+  }
+  /*
+  async loadData() {
     const query = `query issue($id: Int!) {
         issue(id: $id) {
           id title status owner
           effort created due description
         }
       }`;
-    let {
+      let {
       match: {
-        params: {
-          id
-        }
-      }
+        params: { id },
+      },
     } = this.props;
     id = parseInt(id, 10);
-    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_11__["default"])(query, {
-      id
-    }, this.showError);
-    this.setState({
-      issue: data ? data.issue : {},
-      invalidFields: {}
-    });
+    const data = await graphQLFetch(query, { id }, this.showError);
+    this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
+    */
+
 
   showValidation() {
     this.setState({
@@ -1814,6 +1853,10 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   render() {
+    const {
+      issue
+    } = this.state;
+    if (issue == null) return null;
     const {
       issue: {
         id
@@ -1984,7 +2027,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       to: `/edit/${id - 1}`
     }, "Prev"), ' | ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
       to: `/edit/${id + 1}`
-    }, "Next")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Toasts_jsx__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    }, "Next")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Toasts_jsx__WEBPACK_IMPORTED_MODULE_13__["default"], {
       showing: toastVisible,
       onDismiss: this.dismissToast,
       type: toastType
@@ -3088,6 +3131,17 @@ module.exports = require("isomorphic-fetch");
 /***/ (function(module, exports) {
 
 module.exports = require("path");
+
+/***/ }),
+
+/***/ "prop-types":
+/*!*****************************!*\
+  !*** external "prop-types" ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("prop-types");
 
 /***/ }),
 
