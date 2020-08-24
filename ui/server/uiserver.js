@@ -1,16 +1,12 @@
 import dotenv from 'dotenv';
-import path from 'path';
 import express from 'express';
 import proxy from 'http-proxy-middleware';
 import SourceMapSupport from 'source-map-support';
-// import cors from 'cors';
 
 // eslint-disable-next-line import/extensions
 import render from './render.jsx';
 
 const app = express();
-
-// app.use(cors());
 
 SourceMapSupport.install();
 dotenv.config();
@@ -54,12 +50,8 @@ app.get('/env.js', (req, res) => {
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
 
-app.get('/about', (req, res, next) => {
+app.get('*', (req, res, next) => {
   render(req, res, next);
-});
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve('public/index.html'));
 });
 
 const port = process.env.UI_SERVER_PORT || 8000;
