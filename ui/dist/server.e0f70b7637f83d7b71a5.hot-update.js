@@ -1,5 +1,18 @@
+exports.id = "server";
+exports.modules = {
+
+/***/ "./server/template.js":
+/*!****************************!*\
+  !*** ./server/template.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return template; });
 /* eslint-disable linebreak-style */
-export default function template(body, data) {
+function template(body) {
   return `<!DOCTYPE HTML>
   <html>
   <head>
@@ -26,3 +39,8 @@ export default function template(body, data) {
   </html>
   `;
 }
+
+/***/ })
+
+};
+//# sourceMappingURL=server.e0f70b7637f83d7b71a5.hot-update.js.map

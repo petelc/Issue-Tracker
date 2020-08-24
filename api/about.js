@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-let aboutMessage = 'Issue Tracker API v2.0';
+let aboutMessage = 'Issue Tracker API v1.5.1';
 
 function setAboutMessage(_, { message }) {
   aboutMessage = message;

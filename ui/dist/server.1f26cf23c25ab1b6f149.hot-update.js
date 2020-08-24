@@ -1,5 +1,18 @@
+exports.id = "server";
+exports.modules = {
+
+/***/ "./server/template.js":
+/*!****************************!*\
+  !*** ./server/template.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return template; });
 /* eslint-disable linebreak-style */
-export default function template(body, data) {
+function template(body) {
   return `<!DOCTYPE HTML>
   <html>
   <head>
@@ -18,7 +31,7 @@ export default function template(body, data) {
   <body>
     <!-- Page generated from template. -->
     <div id="content">${body}</div>
-    <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
+    <script>window.__INITIAL_DATA__</script>
     <script src="/env.js"></script>
     <script src="/vendor.bundle.js"></script>
     <script src="/app.bundle.js"></script>
@@ -26,3 +39,8 @@ export default function template(body, data) {
   </html>
   `;
 }
+
+/***/ })
+
+};
+//# sourceMappingURL=server.1f26cf23c25ab1b6f149.hot-update.js.map

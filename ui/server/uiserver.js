@@ -3,14 +3,14 @@ import path from 'path';
 import express from 'express';
 import proxy from 'http-proxy-middleware';
 import SourceMapSupport from 'source-map-support';
-import cors from 'cors';
+// import cors from 'cors';
 
 // eslint-disable-next-line import/extensions
 import render from './render.jsx';
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
 SourceMapSupport.install();
 dotenv.config();
@@ -38,7 +38,7 @@ app.use(express.static('public'));
 
 const apiProxyTarget = process.env.API_PROXY_TARGET;
 if (apiProxyTarget) {
-  app.use('/graphql', proxy({ target: apiProxyTarget, changeOrigin: true }));
+  app.use('/graphql', proxy({ target: apiProxyTarget }));
 }
 
 if (!process.env.UI_API_ENDPOINT) {

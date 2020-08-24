@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "0abe7aa414b9b12909cc";
+/******/ 	var hotCurrentHash = "9ae5c15587d240ddbb44";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1017,7 +1017,7 @@ async function render(req, res) {
     context: {}
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_src_Page_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null));
   const body = react_dom_server__WEBPACK_IMPORTED_MODULE_1___default.a.renderToString(element);
-  res.send(Object(_template_js__WEBPACK_IMPORTED_MODULE_4__["default"])(body));
+  res.send(Object(_template_js__WEBPACK_IMPORTED_MODULE_4__["default"])(body, initialData));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (render);
@@ -1035,7 +1035,7 @@ async function render(req, res) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return template; });
 /* eslint-disable linebreak-style */
-function template(body) {
+function template(body, data) {
   return `<!DOCTYPE HTML>
   <html>
   <head>
@@ -1054,6 +1054,7 @@ function template(body) {
   <body>
     <!-- Page generated from template. -->
     <div id="content">${body}</div>
+    <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
     <script src="/env.js"></script>
     <script src="/vendor.bundle.js"></script>
     <script src="/app.bundle.js"></script>
@@ -1083,19 +1084,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var http_proxy_middleware__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(http_proxy_middleware__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var source_map_support__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! source-map-support */ "source-map-support");
 /* harmony import */ var source_map_support__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(source_map_support__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! cors */ "cors");
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _render_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./render.jsx */ "./server/render.jsx");
+/* harmony import */ var _render_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./render.jsx */ "./server/render.jsx");
 
 
 
 
+ // import cors from 'cors';
+// eslint-disable-next-line import/extensions
 
- // eslint-disable-next-line import/extensions
 
+const app = express__WEBPACK_IMPORTED_MODULE_2___default()(); // app.use(cors());
 
-const app = express__WEBPACK_IMPORTED_MODULE_2___default()();
-app.use(cors__WEBPACK_IMPORTED_MODULE_5___default()());
 source_map_support__WEBPACK_IMPORTED_MODULE_4___default.a.install();
 dotenv__WEBPACK_IMPORTED_MODULE_0___default.a.config();
 const enableHMR = (process.env.ENABLE_HMR || 'true') === 'true';
@@ -1127,8 +1126,7 @@ const apiProxyTarget = process.env.API_PROXY_TARGET;
 
 if (apiProxyTarget) {
   app.use('/graphql', http_proxy_middleware__WEBPACK_IMPORTED_MODULE_3___default()({
-    target: apiProxyTarget,
-    changeOrigin: true
+    target: apiProxyTarget
   }));
 }
 
@@ -1147,7 +1145,7 @@ app.get('/env.js', (req, res) => {
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
 app.get('/about', (req, res, next) => {
-  Object(_render_jsx__WEBPACK_IMPORTED_MODULE_6__["default"])(req, res, next);
+  Object(_render_jsx__WEBPACK_IMPORTED_MODULE_5__["default"])(req, res, next);
 });
 app.get('*', (req, res) => {
   res.sendFile(path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve('public/index.html'));
@@ -1158,7 +1156,7 @@ app.listen(port, () => {
 });
 
 if (true) {
-  module.hot.accept(/*! ./render.jsx */ "./server/render.jsx", function() { /* harmony import */ _render_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./render.jsx */ "./server/render.jsx");
+  module.hot.accept(/*! ./render.jsx */ "./server/render.jsx", function() { /* harmony import */ _render_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./render.jsx */ "./server/render.jsx");
  });
 }
 
@@ -2960,17 +2958,6 @@ module.exports = [browserConfig, serverConfig];
 __webpack_require__(/*! ./server/uiserver.js */"./server/uiserver.js");
 module.exports = __webpack_require__(/*! ./node_modules/webpack/hot/poll?1000 */"./node_modules/webpack/hot/poll.js?1000");
 
-
-/***/ }),
-
-/***/ "cors":
-/*!***********************!*\
-  !*** external "cors" ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("cors");
 
 /***/ }),
 
