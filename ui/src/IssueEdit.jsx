@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 import React from 'react';
@@ -12,9 +13,11 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { LinkContainer } from 'react-router-bootstrap';
 import Alert from 'react-bootstrap/Alert';
+import props from 'prop-types';
 // Local Imports
-import graphQLFetch from './graphQLFetch';
+import graphQLFetch from './graphQLFetch.js';
 import Toasts from './Toasts.jsx';
+import store from './store.js';
 
 function format(num) {
   return num != null ? num.toString() : '';
@@ -26,10 +29,25 @@ function unformat(str) {
 }
 
 export default class IssueEdit extends React.Component {
-  constructor(props) {
-    super(props);
+  static async fetchData(match, search, showError) {
+    const query = `query issue($id: Int!) {
+      issue(id: $id) {
+        id title status owner
+        effort created due description
+      }
+    }`;
+    let { params: { id } } = match;
+    id = parseInt(id, 10);
+    const result = await graphQLFetch(query, { id }, showError);
+    return result;
+  }
+
+  constructor() {
+    super();
+    const issue = store.initialData ? store.initialData.issue : null;
+    delete store.initialData;
     this.state = {
-      issue: {},
+      issue,
       invalidFields: {},
       value: format(props.value),
       showingValidation: false,
@@ -49,7 +67,8 @@ export default class IssueEdit extends React.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    const { issue } = this.state;
+    if (issue == null) this.loadData();
   }
 
   componentDidUpdate(prevProps) {
@@ -93,6 +112,15 @@ export default class IssueEdit extends React.Component {
     }
   }
 
+  onValidityChange(event, valid) {
+    const { name } = event.target;
+    this.setState((prevState) => {
+      const invalidFields = { ...prevState.invalidFields, [name]: !valid };
+      if (valid) delete invalidFields[name];
+      return { invalidFields };
+    });
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
     this.showValidation();
@@ -120,15 +148,13 @@ export default class IssueEdit extends React.Component {
     }
   }
 
-  onValidityChange(event, valid) {
-    const { name } = event.target;
-    this.setState((prevState) => {
-      const invalidFields = { ...prevState.invalidFields, [name]: !valid };
-      if (valid) delete invalidFields[name];
-      return { invalidFields };
-    });
+  async loadData() {
+    const { match } = this.props;
+    const data = await IssueEdit.fetchData(match, null, this.showError);
+    this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
 
+  /*
   async loadData() {
     const query = `query issue($id: Int!) {
         issue(id: $id) {
@@ -146,6 +172,8 @@ export default class IssueEdit extends React.Component {
     const data = await graphQLFetch(query, { id }, this.showError);
     this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
+
+  */
 
   showValidation() {
     this.setState({ showingValidation: true });
@@ -176,6 +204,8 @@ export default class IssueEdit extends React.Component {
   }
 
   render() {
+    const { issue } = this.state;
+    if (issue == null) return null;
     const {
       issue: { id },
     } = this.state;
@@ -204,24 +234,24 @@ export default class IssueEdit extends React.Component {
     let validationMessage;
     if (Object.keys(invalidFields).length !== 0 && showingValidation) {
       validationMessage = (
-          <Alert variant="danger" dismissible>
-            <Alert.Heading>Danger Will Robinson!</Alert.Heading>
-            <p>
-              Please correct invalid fields before submitting.
-            </p>
-            <hr />
-            <div className="d-flex justify-content-end">
-              <Button onClick={this.dismissValidation} variant="outline-danger">
-                BAM!
-              </Button>
-            </div>
-          </Alert>
+        <Alert variant="danger" dismissible>
+          <Alert.Heading>Danger Will Robinson!</Alert.Heading>
+          <p>
+            Please correct invalid fields before submitting.
+          </p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button onClick={this.dismissValidation} variant="outline-danger">
+              BAM!
+            </Button>
+          </div>
+        </Alert>
       );
     }
     const { toastVisible, toastMessage, toastType } = this.state;
     return (
       <Card>
-        <Card.Header><h3>{`Editing issue: ${id}`}</h3></Card.Header>
+        <Card.Header>{`Editing issue: ${id}`}</Card.Header>
         <Card.Body>
           <Form onSubmit={this.handleSubmit}>
             <Form.Row>
@@ -287,7 +317,7 @@ export default class IssueEdit extends React.Component {
                   </Form.Label>
                 </Col>
                 <Col sm={9}>
-                <Form.Control
+                  <Form.Control
                     name="effort"
                     value={effort}
                     onChange={this.onChange}
@@ -298,10 +328,10 @@ export default class IssueEdit extends React.Component {
               </Form.Group>
             </Form.Row>
             <Form.Row>
-            <Form.Group validationstate={
+              <Form.Group validationstate={
               invalidFields.due ? 'error' : null
             }
-            >
+              >
                 <Col sm={3}>
                   <Form.Label>
                     Due
@@ -310,7 +340,7 @@ export default class IssueEdit extends React.Component {
                 <Col sm={12}>
                   <Form.Control
                     name="due"
-                    value={due}
+                    value={due.toDateString()}
                     onChange={this.onChange}
                     key={id}
                   />
@@ -349,7 +379,7 @@ export default class IssueEdit extends React.Component {
                 </Col>
                 <Col sm="auto">
                   <Form.Control
-                    as = "textarea"
+                    as="textarea"
                     rows={12}
                     cols={125}
                     name="description"
@@ -362,7 +392,7 @@ export default class IssueEdit extends React.Component {
             </Form.Row>
             <Form.Row>
               <Form.Group>
-                <Col sm="auto"></Col>
+                <Col sm="auto" />
                 <Col className="mr-auto" sm="auto">
                   <ButtonToolbar>
                     <ButtonGroup className="mr-2">
@@ -382,7 +412,7 @@ export default class IssueEdit extends React.Component {
             </Form.Row>
             <Form.Row>
               <Form.Group>
-                <Col sm={3}></Col>
+                <Col sm={3} />
                 <Col sm="auto">
                   {validationMessage}
                 </Col>
