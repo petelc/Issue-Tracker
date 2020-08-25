@@ -251,7 +251,7 @@ export default class IssueEdit extends React.Component {
     const { toastVisible, toastMessage, toastType } = this.state;
     return (
       <Card>
-        <Card.Header><h3>{`Editing issue: ${id}`}</h3></Card.Header>
+        <Card.Header>{`Editing issue: ${id}`}</Card.Header>
         <Card.Body>
           <Form onSubmit={this.handleSubmit}>
             <Form.Row>
@@ -340,7 +340,7 @@ export default class IssueEdit extends React.Component {
                 <Col sm={12}>
                   <Form.Control
                     name="due"
-                    value={due}
+                    value={due.toDateString()}
                     onChange={this.onChange}
                     key={id}
                   />
