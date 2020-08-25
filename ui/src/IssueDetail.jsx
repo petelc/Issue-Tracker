@@ -1,11 +1,9 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable radix */
-/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
-/* eslint-disable linebreak-style */
 import React from 'react';
 
-import graphQLFetch from './graphQLFetch';
+import graphQLFetch from './graphQLFetch.js';
 import Toasts from './Toasts.jsx';
 
 export default class IssueDetail extends React.Component {
@@ -67,16 +65,16 @@ export default class IssueDetail extends React.Component {
     const { toastVisible, toastMessage, toastType } = this.state;
     return (
       <div className="text-area">
-      <h3>Description</h3>
-      <pre>{description}</pre>
-      <Toasts
+        <h3>Description</h3>
+        <pre>{description}</pre>
+        <Toasts
           showing={toastVisible}
           onDismiss={this.dismissToast}
           type={toastType}
         >
           {toastMessage}
         </Toasts>
-    </div>
+      </div>
     );
   }
 }

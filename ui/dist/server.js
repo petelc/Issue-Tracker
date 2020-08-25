@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "55f7b03bf2fb892f9501";
+/******/ 	var hotCurrentHash = "a52d15713c20367b5d85";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1015,7 +1015,9 @@ async function render(req, res) {
 
   if (activeRoute && activeRoute.component.fetchData) {
     const match = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["matchPath"])(req.path, activeRoute);
-    initialData = await activeRoute.component.fetchData(match);
+    const index = req.url.indexOf('?');
+    const search = index !== -1 ? req.url.substr(index) : null;
+    initialData = await activeRoute.component.fetchData(match, search);
   }
 
   _src_store_js__WEBPACK_IMPORTED_MODULE_5__["default"].initialData = initialData;
@@ -1441,17 +1443,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return IssueDetail; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _graphQLFetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./graphQLFetch */ "./src/graphQLFetch.js");
+/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
 /* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
 /* eslint-disable linebreak-style */
 
 /* eslint-disable radix */
 
-/* eslint-disable linebreak-style */
-
 /* eslint-disable react/prop-types */
-
-/* eslint-disable linebreak-style */
 
 
 
@@ -1506,7 +1504,7 @@ class IssueDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
               id description
           }
       }`;
-    const data = await Object(_graphQLFetch__WEBPACK_IMPORTED_MODULE_1__["default"])(query, {
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_1__["default"])(query, {
       id: parseInt(id)
     }, this.showError);
 
@@ -1629,7 +1627,7 @@ function unformat(str) {
 }
 
 class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
-  static async fetchData(match, showError) {
+  static async fetchData(match, search, showError) {
     const query = `query issue($id: Int!) {
       issue(id: $id) {
         id title status owner
@@ -1795,7 +1793,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     const {
       match
     } = this.props;
-    const data = await IssueEdit.fetchData(match, this.showError);
+    const data = await IssueEdit.fetchData(match, null, this.showError);
     this.setState({
       issue: data ? data.issue : {},
       invalidFields: {}
@@ -2277,21 +2275,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./IssueFilter.jsx */ "./src/IssueFilter.jsx");
 /* harmony import */ var _IssueTable_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./IssueTable.jsx */ "./src/IssueTable.jsx");
 /* harmony import */ var _IssueDetail_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./IssueDetail.jsx */ "./src/IssueDetail.jsx");
-/* harmony import */ var _graphQLFetch__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./graphQLFetch */ "./src/graphQLFetch.js");
+/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
 /* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
 /* eslint-disable linebreak-style */
 
 /* eslint-disable import/no-cycle */
 
-/* eslint-disable linebreak-style */
-
 /* eslint-disable import/no-named-as-default-member */
 
-/* eslint-disable linebreak-style */
-
 /* eslint-disable react/prop-types */
-
-/* eslint-disable linebreak-style */
 
 /* eslint "react/jsx-no-undef": "off" */
 
@@ -2303,11 +2296,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  static async fetchData(match, search, showError) {
+    const params = new url_search_params__WEBPACK_IMPORTED_MODULE_2___default.a(search);
+    const vars = {};
+    if (params.get('status')) vars.status = params.get('status');
+    const effortMin = parseInt(params.get('effortMin'), 10);
+    if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+    const effortMax = parseInt(params.get('effortMax'), 10);
+    if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+    const query = `query issueList(
+      $status: StatusType
+      $effortMin: Int
+      $effortMax: Int
+    ) {
+      issueList(
+        status: $status
+        effortMin: $effortMin
+        effortMax: $effortMax
+      ) {
+        id title status owner
+        created effort due
+      }
+    }`;
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_7__["default"])(query, vars, showError);
+    return data;
+  }
+
   constructor() {
     super();
+    const issues = _store_js__WEBPACK_IMPORTED_MODULE_9__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_9__["default"].initialData.issueList : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_9__["default"].initialData;
     this.state = {
-      issues: [],
+      issues,
       toastVisible: false,
       toastMessage: ' ',
       toastType: 'info'
@@ -2320,7 +2342,10 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    const {
+      issues
+    } = this.state;
+    if (issues == null) this.loadData();
   }
 
   componentDidUpdate(prevProps) {
@@ -2338,8 +2363,7 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     if (prevSearch !== search) {
       this.loadData();
     }
-  } // Handle the querystring param here for Issue Filter
-
+  }
 
   async loadData() {
     const {
@@ -2347,10 +2371,24 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
         search
       }
     } = this.props;
-    const params = new url_search_params__WEBPACK_IMPORTED_MODULE_2___default.a(search);
-    const vars = {};
-    if (params.get('status')) vars.status = params.get('status'); // Adding in effortMin and effortMax parameters
+    const data = await IssueList.fetchData(null, search, this.showError);
 
+    if (data) {
+      this.setState({
+        issues: data.issueList
+      });
+    }
+  }
+  /*
+  // Handle the querystring param here for Issue Filter
+  async loadData() {
+    const {
+      location: { search },
+    } = this.props;
+    const params = new URLSearchParams(search);
+    const vars = {};
+    if (params.get('status')) vars.status = params.get('status');
+      // Adding in effortMin and effortMax parameters
     const effortMin = parseInt(params.get('effortMin'), 10);
     if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
     const effortMax = parseInt(params.get('effortMax'), 10);
@@ -2369,14 +2407,13 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
           created effort due
         }
       }`;
-    const data = await Object(_graphQLFetch__WEBPACK_IMPORTED_MODULE_7__["default"])(query, vars, this.showError);
-
+      const data = await graphQLFetch(query, vars, this.showError);
     if (data) {
-      this.setState({
-        issues: data.issueList
-      });
+      this.setState({ issues: data.issueList });
     }
   }
+  */
+
 
   async closeIssue(index) {
     const query = `mutation issueClose($id: Int!) {
@@ -2388,7 +2425,7 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     const {
       issues
     } = this.state;
-    const data = await Object(_graphQLFetch__WEBPACK_IMPORTED_MODULE_7__["default"])(query, {
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_7__["default"])(query, {
       id: issues[index].id
     }, this.showError);
 
@@ -2422,7 +2459,7 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     const {
       id
     } = issues[index];
-    const data = await Object(_graphQLFetch__WEBPACK_IMPORTED_MODULE_7__["default"])(query, {
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_7__["default"])(query, {
       id
     }, this.showError);
 
@@ -2472,7 +2509,8 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   render() {
     const {
       issues
-    } = this.state; // eslint-disable-next-line react/prop-types
+    } = this.state;
+    if (issues == null) return null; // eslint-disable-next-line react/prop-types
 
     const {
       match

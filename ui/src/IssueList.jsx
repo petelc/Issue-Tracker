@@ -1,10 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/no-cycle */
-/* eslint-disable linebreak-style */
 /* eslint-disable import/no-named-as-default-member */
-/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
-/* eslint-disable linebreak-style */
 /* eslint "react/jsx-no-undef": "off" */
 import React from 'react';
 import { Route } from 'react-router-dom';
@@ -13,14 +10,46 @@ import Card from 'react-bootstrap/Card';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import IssueDetail from './IssueDetail.jsx';
-import graphQLFetch from './graphQLFetch';
+import graphQLFetch from './graphQLFetch.js';
 import Toasts from './Toasts.jsx';
+import store from './store.js';
 
 export default class IssueList extends React.Component {
+  static async fetchData(match, search, showError) {
+    const params = new URLSearchParams(search);
+    const vars = {};
+    if (params.get('status')) vars.status = params.get('status');
+
+    const effortMin = parseInt(params.get('effortMin'), 10);
+    if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+    const effortMax = parseInt(params.get('effortMax'), 10);
+    if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+
+    const query = `query issueList(
+      $status: StatusType
+      $effortMin: Int
+      $effortMax: Int
+    ) {
+      issueList(
+        status: $status
+        effortMin: $effortMin
+        effortMax: $effortMax
+      ) {
+        id title status owner
+        created effort due
+      }
+    }`;
+
+    const data = await graphQLFetch(query, vars, showError);
+    return data;
+  }
+
   constructor() {
     super();
+    const issues = store.initialData ? store.initialData.issueList : null;
+    delete store.initialData;
     this.state = {
-      issues: [],
+      issues,
       toastVisible: false,
       toastMessage: ' ',
       toastType: 'info',
@@ -33,7 +62,8 @@ export default class IssueList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    const { issues } = this.state;
+    if (issues == null) this.loadData();
   }
 
   componentDidUpdate(prevProps) {
@@ -48,6 +78,15 @@ export default class IssueList extends React.Component {
     }
   }
 
+  async loadData() {
+    const { location: { search } } = this.props;
+    const data = await IssueList.fetchData(null, search, this.showError);
+    if (data) {
+      this.setState({ issues: data.issueList });
+    }
+  }
+
+  /*
   // Handle the querystring param here for Issue Filter
   async loadData() {
     const {
@@ -82,6 +121,7 @@ export default class IssueList extends React.Component {
       this.setState({ issues: data.issueList });
     }
   }
+  */
 
   async closeIssue(index) {
     const query = `mutation issueClose($id: Int!) {
@@ -150,24 +190,25 @@ export default class IssueList extends React.Component {
 
   render() {
     const { issues } = this.state;
+    if (issues == null) return null;
     // eslint-disable-next-line react/prop-types
     const { match } = this.props;
     const { toastVisible, toastMessage, toastType } = this.state;
     return (
-      <React.Fragment>
+      <>
         <Card className="text-left bg-dark text-white">
           <Card.Header><h5>Filter</h5></Card.Header>
           <Card.Body>
             <IssueFilter />
           </Card.Body>
         </Card>
-        <div className="spacer"></div>
+        <div className="spacer" />
         <IssueTable
           issues={issues}
           closeIssue={this.closeIssue}
           deleteIssue={this.deleteIssue}
         />
-        <div className="spacer"></div>
+        <div className="spacer" />
         <Route path={`${match.path}/:id`} component={IssueDetail} />
         <Toasts
           showing={toastVisible}
@@ -176,7 +217,7 @@ export default class IssueList extends React.Component {
         >
           {toastMessage}
         </Toasts>
-      </React.Fragment>
+      </>
     );
   }
 }
