@@ -14,23 +14,18 @@ import Modal from 'react-bootstrap/Modal';
 import {
   BsPlusCircle, // BsChevronDoubleDown,
 } from 'react-icons/bs';
-import graphQLFetch from './graphQLFetch';
-import Toasts from './Toasts.jsx';
+import graphQLFetch from './graphQLFetch.js';
+import withToasts from './withToasts.jsx';
 
 class IssueAddNavItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showing: false,
-      toastVisible: false,
-      toastMessage: ' ',
-      toastType: 'success',
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.showError = this.showError.bind(this);
-    this.dismissToast = this.dismissToast.bind(this);
   }
 
   showModal() {
@@ -39,18 +34,6 @@ class IssueAddNavItem extends React.Component {
 
   hideModal() {
     this.setState({ showing: false });
-  }
-
-  showError(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'danger',
-    });
-  }
-
-  dismissToast() {
-    this.setState({ toastVisible: false });
   }
 
   async handleSubmit(e) {
@@ -69,7 +52,8 @@ class IssueAddNavItem extends React.Component {
         }
     }`;
 
-    const data = await graphQLFetch(query, { issue }, this.showError);
+    const { showError } = this.props;
+    const data = await graphQLFetch(query, { issue }, showError);
     if (data) {
       const { history } = this.props;
       history.push(`/edit/${data.issueAdd.id}`);
@@ -78,71 +62,63 @@ class IssueAddNavItem extends React.Component {
 
   render() {
     const { showing } = this.state;
-    const { toastVisible, toastMessage, toastType } = this.state;
     return (
-        <React.Fragment>
-            <Nav.Link onClick={this.showModal}>
-                <OverlayTrigger
-                    placement="bottom"
-                    delayShow={1000}
-                    overlay={<Tooltip id="create-issue">Create Issue</Tooltip>}
-                >
-                    <BsPlusCircle />
-                </OverlayTrigger>
-            </Nav.Link>
-            <Modal
-                keyboard
-                show={showing}
-                onHide={this.hideModal}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-                >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Create Issue
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form name="issueAdd">
-                        <Form.Group>
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                                name="title"
-                                autoFocus
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Owner</Form.Label>
-                            <Form.Control
-                                name="owner"
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <ButtonToolbar>
-                        <Button
-                            type="button"
-                            variant="primary"
-                            onClick={this.handleSubmit}
-                            >
-                                Submit
-                            </Button>
-                            <Button variant="link" onClick={this.hideModal}>Close</Button>
-                    </ButtonToolbar>
-                </Modal.Footer>
-            </Modal>
-            <Toasts
-                showing={toastVisible}
-                onDismiss={this.dismissToast}
-                type={toastType}
-                >
-                {toastMessage}
-            </Toasts>
-        </React.Fragment>
+      <>
+        <Nav.Link onClick={this.showModal}>
+          <OverlayTrigger
+            placement="bottom"
+            delayShow={1000}
+            overlay={<Tooltip id="create-issue">Create Issue</Tooltip>}
+          >
+            <BsPlusCircle />
+          </OverlayTrigger>
+        </Nav.Link>
+        <Modal
+          keyboard
+          show={showing}
+          onHide={this.hideModal}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Create Issue
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form name="issueAdd">
+              <Form.Group>
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  name="title"
+                  autoFocus
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Owner</Form.Label>
+                <Form.Control
+                  name="owner"
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <ButtonToolbar>
+              <Button
+                type="button"
+                variant="primary"
+                onClick={this.handleSubmit}
+              >
+                Submit
+              </Button>
+              <Button variant="link" onClick={this.hideModal}>Close</Button>
+            </ButtonToolbar>
+          </Modal.Footer>
+        </Modal>
+      </>
     );
   }
 }
 
-export default withRouter(IssueAddNavItem);
+export default withToasts(withRouter(IssueAddNavItem));

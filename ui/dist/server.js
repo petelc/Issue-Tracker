@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "c359d9d2de41fe6e5154";
+/******/ 	var hotCurrentHash = "adbae35601952f48d3e7";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1293,8 +1293,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-icons/bs */ "react-icons/bs");
 /* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_icons_bs__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _graphQLFetch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./graphQLFetch */ "./src/graphQLFetch.js");
-/* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
+/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
+/* harmony import */ var _withToasts_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./withToasts.jsx */ "./src/withToasts.jsx");
 /* eslint-disable linebreak-style */
 
 /* eslint-disable react/prop-types */
@@ -1318,16 +1318,11 @@ class IssueAddNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compo
   constructor(props) {
     super(props);
     this.state = {
-      showing: false,
-      toastVisible: false,
-      toastMessage: ' ',
-      toastType: 'success'
+      showing: false
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.showError = this.showError.bind(this);
-    this.dismissToast = this.dismissToast.bind(this);
   }
 
   showModal() {
@@ -1339,20 +1334,6 @@ class IssueAddNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compo
   hideModal() {
     this.setState({
       showing: false
-    });
-  }
-
-  showError(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'danger'
-    });
-  }
-
-  dismissToast() {
-    this.setState({
-      toastVisible: false
     });
   }
 
@@ -1370,9 +1351,12 @@ class IssueAddNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compo
             id
         }
     }`;
-    const data = await Object(_graphQLFetch__WEBPACK_IMPORTED_MODULE_9__["default"])(query, {
+    const {
+      showError
+    } = this.props;
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_9__["default"])(query, {
       issue
-    }, this.showError);
+    }, showError);
 
     if (data) {
       const {
@@ -1385,11 +1369,6 @@ class IssueAddNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compo
   render() {
     const {
       showing
-    } = this.state;
-    const {
-      toastVisible,
-      toastMessage,
-      toastType
     } = this.state;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Nav__WEBPACK_IMPORTED_MODULE_2___default.a.Link, {
       onClick: this.showModal
@@ -1424,16 +1403,12 @@ class IssueAddNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compo
     }, "Submit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
       variant: "link",
       onClick: this.hideModal
-    }, "Close")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Toasts_jsx__WEBPACK_IMPORTED_MODULE_10__["default"], {
-      showing: toastVisible,
-      onDismiss: this.dismissToast,
-      type: toastType
-    }, toastMessage));
+    }, "Close")))));
   }
 
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["withRouter"])(IssueAddNavItem));
+/* harmony default export */ __webpack_exports__["default"] = (Object(_withToasts_jsx__WEBPACK_IMPORTED_MODULE_10__["default"])(Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["withRouter"])(IssueAddNavItem)));
 
 /***/ }),
 
@@ -1473,7 +1448,6 @@ function IssueDetail({
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return IssueEdit; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
@@ -1499,8 +1473,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! prop-types */ "prop-types");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
-/* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
-/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _withToasts_jsx__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./withToasts.jsx */ "./src/withToasts.jsx");
 /* eslint-disable no-undef */
 
 /* eslint-disable linebreak-style */
@@ -1555,24 +1529,18 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
   constructor() {
     super();
-    const issue = _store_js__WEBPACK_IMPORTED_MODULE_14__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_14__["default"].initialData.issue : null;
-    delete _store_js__WEBPACK_IMPORTED_MODULE_14__["default"].initialData;
+    const issue = _store_js__WEBPACK_IMPORTED_MODULE_13__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_13__["default"].initialData.issue : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_13__["default"].initialData;
     this.state = {
       issue,
       invalidFields: {},
       value: format(prop_types__WEBPACK_IMPORTED_MODULE_11___default.a.value),
-      showingValidation: false,
-      toastVisible: false,
-      toastMessage: ' ',
-      toastType: 'success'
+      showingValidation: false
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.showValidation = this.showValidation.bind(this);
-    this.showSuccess = this.showSuccess.bind(this);
-    this.showError = this.showError.bind(this);
-    this.dismissToast = this.dismissToast.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onEffortChange = this.onEffortChange.bind(this);
   }
@@ -1683,48 +1651,34 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       created,
       ...changes
     } = issue;
+    const {
+      showSuccess,
+      showError
+    } = this.props;
     const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_12__["default"])(query, {
       changes,
       id
-    }, this.showError);
+    }, showError);
 
     if (data) {
       this.setState({
         issue: data.issueUpdate
       });
-      this.showSuccess('Updated Issue Successfully');
+      showSuccess('Updated Issue Successfully');
     }
   }
 
   async loadData() {
     const {
-      match
+      match,
+      showError
     } = this.props;
-    const data = await IssueEdit.fetchData(match, null, this.showError);
+    const data = await IssueEdit.fetchData(match, null, showError);
     this.setState({
       issue: data ? data.issue : {},
       invalidFields: {}
     });
   }
-  /*
-  async loadData() {
-    const query = `query issue($id: Int!) {
-        issue(id: $id) {
-          id title status owner
-          effort created due description
-        }
-      }`;
-      let {
-      match: {
-        params: { id },
-      },
-    } = this.props;
-    id = parseInt(id, 10);
-    const data = await graphQLFetch(query, { id }, this.showError);
-    this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
-  }
-    */
-
 
   showValidation() {
     this.setState({
@@ -1735,28 +1689,6 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   dismissValidation() {
     this.setState({
       showingValidation: false
-    });
-  }
-
-  showSuccess(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'success'
-    });
-  }
-
-  showError(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'danger'
-    });
-  }
-
-  dismissToast() {
-    this.setState({
-      toastVisible: false
     });
   }
 
@@ -1823,11 +1755,6 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       }, "BAM!")));
     }
 
-    const {
-      toastVisible,
-      toastMessage,
-      toastType
-    } = this.state;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_2___default.a, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_2___default.a.Header, null, `Editing issue: ${id}`), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_2___default.a.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Form__WEBPACK_IMPORTED_MODULE_3___default.a, {
       onSubmit: this.handleSubmit
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Form__WEBPACK_IMPORTED_MODULE_3___default.a.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Form__WEBPACK_IMPORTED_MODULE_3___default.a.Group, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Col__WEBPACK_IMPORTED_MODULE_4___default.a, {
@@ -1935,14 +1862,14 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       to: `/edit/${id - 1}`
     }, "Prev"), ' | ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
       to: `/edit/${id + 1}`
-    }, "Next")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Toasts_jsx__WEBPACK_IMPORTED_MODULE_13__["default"], {
-      showing: toastVisible,
-      onDismiss: this.dismissToast,
-      type: toastType
-    }, toastMessage));
+    }, "Next")));
   }
 
 }
+
+const IssueEditWithToasts = Object(_withToasts_jsx__WEBPACK_IMPORTED_MODULE_14__["default"])(IssueEdit);
+IssueEditWithToasts.fetchData = IssueEdit.fetchData;
+/* harmony default export */ __webpack_exports__["default"] = (IssueEditWithToasts);
 
 /***/ }),
 
@@ -2170,7 +2097,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return IssueList; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var url_search_params__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-search-params */ "url-search-params");
@@ -2181,8 +2107,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _IssueTable_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./IssueTable.jsx */ "./src/IssueTable.jsx");
 /* harmony import */ var _IssueDetail_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./IssueDetail.jsx */ "./src/IssueDetail.jsx");
 /* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
-/* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
-/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _withToasts_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./withToasts.jsx */ "./src/withToasts.jsx");
 /* eslint-disable linebreak-style */
 
 /* eslint-disable import/no-cycle */
@@ -2192,6 +2118,7 @@ __webpack_require__.r(__webpack_exports__);
 /* eslint-disable react/prop-types */
 
 /* eslint "react/jsx-no-undef": "off" */
+
 
 
 
@@ -2250,21 +2177,15 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
   constructor() {
     super();
-    const issues = _store_js__WEBPACK_IMPORTED_MODULE_8__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_8__["default"].initialData.issueList : null;
-    const selectedIssue = _store_js__WEBPACK_IMPORTED_MODULE_8__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_8__["default"].initialData.issue : null;
-    delete _store_js__WEBPACK_IMPORTED_MODULE_8__["default"].initialData;
+    const issues = _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData.issueList : null;
+    const selectedIssue = _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData.issue : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData;
     this.state = {
       issues,
-      selectedIssue,
-      toastVisible: false,
-      toastMessage: ' ',
-      toastType: 'info'
+      selectedIssue
     };
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
-    this.showSuccess = this.showSuccess.bind(this);
-    this.showError = this.showError.bind(this);
-    this.dismissToast = this.dismissToast.bind(this);
   }
 
   componentDidMount() {
@@ -2306,9 +2227,10 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       location: {
         search
       },
-      match
+      match,
+      showError
     } = this.props;
-    const data = await IssueList.fetchData(match, search, this.showError);
+    const data = await IssueList.fetchData(match, search, showError);
 
     if (data) {
       this.setState({
@@ -2328,9 +2250,12 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     const {
       issues
     } = this.state;
+    const {
+      showError
+    } = this.props;
     const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_6__["default"])(query, {
       id: issues[index].id
-    }, this.showError);
+    }, showError);
 
     if (data) {
       this.setState(prevState => {
@@ -2360,11 +2285,15 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       history
     } = this.props;
     const {
+      showSuccess,
+      showError
+    } = this.props;
+    const {
       id
     } = issues[index];
     const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_6__["default"])(query, {
       id
-    }, this.showError);
+    }, showError);
 
     if (data && data.issueDelete) {
       this.setState(prevState => {
@@ -2382,31 +2311,10 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
           issues: newList
         };
       });
+      showSuccess(`Deleted issue ${id} successfully.`);
     } else {
       this.loadData();
     }
-  }
-
-  showSuccess(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'success'
-    });
-  }
-
-  showError(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'danger'
-    });
-  }
-
-  dismissToast() {
-    this.setState({
-      toastVisible: false
-    });
   }
 
   render() {
@@ -2416,11 +2324,6 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     if (issues == null) return null;
     const {
       selectedIssue
-    } = this.state;
-    const {
-      toastVisible,
-      toastMessage,
-      toastType
     } = this.state;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_2___default.a, {
       className: "text-left bg-dark text-white"
@@ -2434,14 +2337,14 @@ class IssueList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       className: "spacer"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_IssueDetail_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
       issue: selectedIssue
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Toasts_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], {
-      showing: toastVisible,
-      onDismiss: this.dismissToast,
-      type: toastType
-    }, toastMessage));
+    }));
   }
 
 }
+
+const IssueListWithToasts = Object(_withToasts_jsx__WEBPACK_IMPORTED_MODULE_8__["default"])(IssueList);
+IssueListWithToasts.fetchData = IssueList.fetchData;
+/* harmony default export */ __webpack_exports__["default"] = (Object(_withToasts_jsx__WEBPACK_IMPORTED_MODULE_8__["default"])(IssueList));
 
 /***/ }),
 
@@ -2909,6 +2812,82 @@ const routes = [{
 __webpack_require__.r(__webpack_exports__);
 const store = {};
 /* harmony default export */ __webpack_exports__["default"] = (store);
+
+/***/ }),
+
+/***/ "./src/withToasts.jsx":
+/*!****************************!*\
+  !*** ./src/withToasts.jsx ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return withToasts; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Toasts_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Toasts.jsx */ "./src/Toasts.jsx");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+/* eslint-disable react/jsx-props-no-spreading */
+
+
+function withToasts(OriginalComponent) {
+  return class ToastWrapper extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        toastVisible: false,
+        toastMessage: '',
+        toastType: 'success'
+      };
+      this.showSuccess = this.showSuccess.bind(this);
+      this.showError = this.showError.bind(this);
+      this.dismissToast = this.dismissToast.bind(this);
+    }
+
+    showSuccess(message) {
+      this.setState({
+        toastVisible: true,
+        toastMessage: message,
+        toastType: 'success'
+      });
+    }
+
+    showError(message) {
+      this.setState({
+        toastVisible: true,
+        toastMessage: message,
+        toastType: 'danger'
+      });
+    }
+
+    dismissToast() {
+      this.setState({
+        toastVisible: false
+      });
+    }
+
+    render() {
+      const {
+        toastVisible,
+        toastMessage,
+        toastType
+      } = this.state;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(OriginalComponent, _extends({
+        showError: this.showError,
+        showSuccess: this.showSuccess,
+        dismissToast: this.dismissToast
+      }, this.props)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Toasts_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        showing: toastVisible,
+        onDismiss: this.dismissToast,
+        type: toastType
+      }, toastMessage));
+    }
+
+  };
+}
 
 /***/ }),
 
