@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "adbae35601952f48d3e7";
+/******/ 	var hotCurrentHash = "4bc4e1da381d043e688b";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1304,9 +1304,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // import FormControl from 'react-bootstrap/FormControl';
 
- // import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 
 

@@ -6,14 +6,10 @@ import { withRouter } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-// import FormControl from 'react-bootstrap/FormControl';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-// import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {
-  BsPlusCircle, // BsChevronDoubleDown,
-} from 'react-icons/bs';
+import { BsPlusCircle } from 'react-icons/bs';
 import graphQLFetch from './graphQLFetch.js';
 import withToasts from './withToasts.jsx';
 
