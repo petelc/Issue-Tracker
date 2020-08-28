@@ -146,7 +146,7 @@ class IssueList extends React.Component {
         <Card className="text-left bg-dark text-white">
           <Card.Header><h5>Filter</h5></Card.Header>
           <Card.Body>
-            <IssueFilter />
+            <IssueFilter urlBase="/issues" />
           </Card.Body>
         </Card>
         <div className="spacer" />
