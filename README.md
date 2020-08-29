@@ -33,6 +33,9 @@ Generally I liked the book and the way it was written. The content was presented
 
 ## Changes to what i have been working with
 
+So this branch is a kind of experiment in that i brought in the Victory Library and attempted to built out a chart with it. I think i just need to 
+build its own component and then call it from the issue report page. 
+
 *This is solely a shift in UI Libraries*
 
 I had decided to use React Material-UI. I have to say that i did like it for the most part. I did have to do a lot of work to make it work within the current project.
