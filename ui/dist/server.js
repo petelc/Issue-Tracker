@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "98c903286e22dcfa773d";
+/******/ 	var hotCurrentHash = "34318f88e8a85e79fa0e";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2366,13 +2366,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap_Table__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Table__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var url_search_params__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-search-params */ "url-search-params");
 /* harmony import */ var url_search_params__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(url_search_params__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _withToasts_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./withToasts.jsx */ "./src/withToasts.jsx");
-/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
-/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
-/* harmony import */ var _IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./IssueFilter.jsx */ "./src/IssueFilter.jsx");
+/* harmony import */ var victory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! victory */ "victory");
+/* harmony import */ var victory__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(victory__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _withToasts_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./withToasts.jsx */ "./src/withToasts.jsx");
+/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./IssueFilter.jsx */ "./src/IssueFilter.jsx");
 /* eslint-disable linebreak-style */
 
 
+
+ // Adding Victory Charting
 
 
 
@@ -2380,6 +2384,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const statuses = ['New', 'Assigned', 'Fixed', 'Closed'];
+const myData = [];
 
 class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   static async fetchData(match, search, showError) {
@@ -2415,14 +2420,14 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
         owner New Assigned Fixed Closed
       }
     }`;
-    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_5__["default"])(query, vars, showError);
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_6__["default"])(query, vars, showError);
     return data;
   }
 
   constructor(props) {
     super(props);
-    const stats = _store_js__WEBPACK_IMPORTED_MODULE_6__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_6__["default"].initialData.issueCounts : null;
-    delete _store_js__WEBPACK_IMPORTED_MODULE_6__["default"].initialData;
+    const stats = _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData.issueCounts : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_7__["default"].initialData;
     this.state = {
       stats
     };
@@ -2482,9 +2487,13 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, counts.owner), statuses.map(status => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
       key: status
     }, counts[status]))));
+    const cData = stats.map(counts => myData.push({
+      x: `${counts.statuses}`,
+      y: `${counts.statuses}`
+    }));
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a, {
       className: "text-left bg-dark text-white"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a.Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Filter")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a.Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Filter")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_8__["default"], {
       urlBase: "/report"
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "spacer"
@@ -2494,12 +2503,24 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
       hover: true,
       responsive: true,
       variant: "dark"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Owner"), headerColumns)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, statRows)));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Owner"), headerColumns)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, statRows)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "spacer"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a.Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Chart")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_1___default.a.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(victory__WEBPACK_IMPORTED_MODULE_4__["VictoryPie"], {
+      colorScale: ['tomato', 'orange', 'gold', 'cyan', 'navy'],
+      data: cData,
+      style: {
+        labels: {
+          fill: 'gray',
+          fontSize: 20,
+          fontWeight: 'bold'
+        }
+      }
+    }))));
   }
 
 }
 
-const IssueReportWithToast = Object(_withToasts_jsx__WEBPACK_IMPORTED_MODULE_4__["default"])(IssueReport);
+const IssueReportWithToast = Object(_withToasts_jsx__WEBPACK_IMPORTED_MODULE_5__["default"])(IssueReport);
 IssueReportWithToast.fetchData = IssueReport.fetchData;
 /* harmony default export */ __webpack_exports__["default"] = (IssueReportWithToast);
 
@@ -3469,6 +3490,17 @@ module.exports = require("source-map-support");
 /***/ (function(module, exports) {
 
 module.exports = require("url-search-params");
+
+/***/ }),
+
+/***/ "victory":
+/*!**************************!*\
+  !*** external "victory" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("victory");
 
 /***/ }),
 

@@ -43,7 +43,8 @@
     "react-router-dom": "^5.2.0",
     "serialize-javascript": "^4.0.0",
     "source-map-support": "^0.5.19",
-    "url-search-params": "^1.1.0"
+    "url-search-params": "^1.1.0",
+    "victory": "^35.0.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",

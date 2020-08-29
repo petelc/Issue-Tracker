@@ -4,6 +4,10 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import URLSearchParams from 'url-search-params';
+// Adding Victory Charting
+import {
+  VictoryPie,
+} from 'victory';
 
 import withToasts from './withToasts.jsx';
 import graphQLFetch from './graphQLFetch.js';
@@ -11,6 +15,7 @@ import store from './store.js';
 import IssueFilter from './IssueFilter.jsx';
 
 const statuses = ['New', 'Assigned', 'Fixed', 'Closed'];
+const myData = [];
 
 class IssueReport extends React.Component {
   static async fetchData(match, search, showError) {
@@ -92,6 +97,11 @@ class IssueReport extends React.Component {
         ))}
       </tr>
     ));
+    const cData = stats.map((counts) => (
+      myData.push({
+        x: `${counts.statuses}`,
+        y: `${counts.statuses}`,
+      })));
     return (
       <>
         <Card className="text-left bg-dark text-white">
@@ -110,6 +120,17 @@ class IssueReport extends React.Component {
           </thead>
           <tbody>{statRows}</tbody>
         </Table>
+        <div className="spacer" />
+        <Card>
+          <Card.Header><h5>Chart</h5></Card.Header>
+          <Card.Body>
+            <VictoryPie
+              colorScale={['tomato', 'orange', 'gold', 'cyan', 'navy']}
+              data={cData}
+              style={{ labels: { fill: 'gray', fontSize: 20, fontWeight: 'bold' } }}
+            />
+          </Card.Body>
+        </Card>
       </>
     );
   }
