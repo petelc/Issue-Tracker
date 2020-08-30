@@ -3,13 +3,14 @@
 /* eslint-disable class-methods-use-this */
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import Nav from 'react-bootstrap/Nav';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+// import Nav from 'react-bootstrap/Nav';
+import NavItem from 'react-bootstrap/NavItem';
 import Form from 'react-bootstrap/Form';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { BsPlusCircle } from 'react-icons/bs';
+import { GoIssueOpened } from 'react-icons/go';
+import Badge from 'react-bootstrap/Badge';
 import graphQLFetch from './graphQLFetch.js';
 import withToasts from './withToasts.jsx';
 
@@ -60,15 +61,12 @@ class IssueAddNavItem extends React.Component {
     const { showing } = this.state;
     return (
       <>
-        <Nav.Link onClick={this.showModal}>
-          <OverlayTrigger
-            placement="bottom"
-            delayShow={1000}
-            overlay={<Tooltip id="create-issue">Create Issue</Tooltip>}
-          >
-            <BsPlusCircle />
-          </OverlayTrigger>
-        </Nav.Link>
+        <NavItem onClick={this.showModal} className="bg-dark">
+          <Button variant="btn btn-dark link">
+            Create Issue
+            <Badge><GoIssueOpened /></Badge>
+          </Button>
+        </NavItem>
         <Modal
           keyboard
           show={showing}

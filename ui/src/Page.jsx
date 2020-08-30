@@ -1,9 +1,11 @@
+/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable linebreak-style */
 /* eslint-disable import/no-cycle */
 /* eslint-disable linebreak-style */
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import NavItem from 'react-bootstrap/NavItem';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,6 +16,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Contents from './Contents.jsx';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Search from './Search.jsx';
+import SignInNavItem from './SignInNavItem.jsx';
 
 function NavBar() {
   return (
@@ -44,7 +47,12 @@ function NavBar() {
         </Form>
       </Col>
       <Nav className="nav nav-dark bg-dark justify-content-end">
-        <IssueAddNavItem />
+        <NavItem>
+          <IssueAddNavItem />
+        </NavItem>
+        <NavItem>
+          <SignInNavItem />
+        </NavItem>
       </Nav>
     </Navbar>
   );
