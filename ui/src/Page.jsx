@@ -17,7 +17,7 @@ import Search from './Search.jsx';
 
 function NavBar() {
   return (
-    <Navbar className="navbar-expand-lg navbar navbar-dark bg-dark">
+    <Navbar fluid className="navbar-expand-lg navbar navbar-dark bg-dark">
       <Navbar.Brand>Issue Tracker</Navbar.Brand>
       <Nav className="mr-auto nav nav-dark bg-dark">
         <LinkContainer exact to="/">
@@ -29,26 +29,21 @@ function NavBar() {
         <LinkContainer to="/report">
           <Nav.Link>Report</Nav.Link>
         </LinkContainer>
-        <LinkContainer to="/about">
-          <Nav.Link>About</Nav.Link>
-        </LinkContainer>
         <NavDropdown
           id="user-dropdown"
           title="More"
-          className="dropdown-menu-lg-right"
-          size="lg"
         >
-          <NavDropdown.Item>Action</NavDropdown.Item>
-          <NavDropdown.Item>Reaction</NavDropdown.Item>
-          <NavDropdown.Item>Subtraction</NavDropdown.Item>
+          <LinkContainer to="/about" className="text-dark">
+            <Nav.Link>About</Nav.Link>
+          </LinkContainer>
         </NavDropdown>
       </Nav>
-      <Col sm={5} className="my-1">
-        <Form>
+      <Col sm={5}>
+        <Form inline>
           <Search />
         </Form>
       </Col>
-      <Nav className="nav nav-dark bg-dark">
+      <Nav className="nav nav-dark bg-dark justify-content-end">
         <IssueAddNavItem />
       </Nav>
     </Navbar>

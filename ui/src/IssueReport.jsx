@@ -90,6 +90,7 @@ class IssueReport extends React.Component {
         {statuses.map((status) => (
           <td key={status}>{counts[status]}</td>
         ))}
+        <td>{statuses.reduce((total, status) => total + counts[status], 0)}</td>
       </tr>
     ));
     return (
@@ -106,6 +107,7 @@ class IssueReport extends React.Component {
             <tr>
               <th>Owner</th>
               {headerColumns}
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>{statRows}</tbody>

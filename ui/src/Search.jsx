@@ -5,6 +5,10 @@ import SelectAsync from 'react-select/lib/Async';
 import graphQLFetch from './graphQLFetch.js';
 import withToasts from './withToasts.jsx';
 
+const selectStyles = {
+  control: (provided) => ({ ...provided, minWidth: 240, margin: 8 }),
+};
+
 class Search extends React.Component {
   constructor(props) {
     super(props);
@@ -39,6 +43,7 @@ class Search extends React.Component {
         loadOptions={this.loadOptions}
         filterOptions={() => true}
         onChange={this.onChangeSelection}
+        styles={selectStyles}
         components={{ DropDownIndicator: null }}
       />
     );

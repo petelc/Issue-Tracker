@@ -22,6 +22,10 @@ pre {
   color: #4b5d67;
 }
 
+.form-bg {
+  background-color: #318fb5;
+}
+
 .masterContainer {
   display: block;
   margin-left: 1em;
