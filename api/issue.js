@@ -12,7 +12,7 @@ async function get(_, { id }) {
 }
 
 async function list(_, {
-  status, effortMin, effortMax, page,
+  status, effortMin, effortMax, search, page,
 }) {
   const db = getDb();
   const filter = {};
@@ -24,7 +24,8 @@ async function list(_, {
     if (effortMax !== undefined) filter.effort.$lte = effortMax;
   }
 
-  // const issues = await db.collection('issues').find(filter).toArray();
+  if (search) filter.$text = { $search: search };
+
   const cursor = db.collection('issues').find(filter)
     .sort({ id: 1 })
     .skip(PAGE_SIZE * (page - 1))
