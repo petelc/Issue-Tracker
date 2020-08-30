@@ -48,7 +48,7 @@ I feel that I should talk about the issues that I had while coding and what the 
 2) Currently I am in Chapter10 just completed the Update API section. The code works per se in that the issue updates when running the mutation in the graphql playground but it returns an error stating "message": "Cannot return null for non-nullable field Mutation.issueUpdate.", So hopefully when i update the UI part this doesn't cause me a lot of grief.  
 3) Every time I write a function like closeIssue or deleteIssue the callback does not work, It does what is was supposed to but it does not show it on the UI. But when I copy the authors code for the functions it works. Yet I cant see a difference.
 
-Here is my deleteIssue function  
+###Here is my deleteIssue function  
 ```javascript
 async deleteIssue(index) {    
       const query = `mutation issueDelete($id: Int!) {    
@@ -71,11 +71,12 @@ async deleteIssue(index) {
         this.loadData();    
       }    
     }
-    
+```
     
 
-Here is the Author's deleteIssue Function
-```Javascript
+###Here is the Author's deleteIssue Function
+
+```javascript
 async deleteIssue(index) {
     const query = `mutation issueDelete($id: Int!) {
       issueDelete(id: $id)
