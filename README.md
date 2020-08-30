@@ -100,6 +100,8 @@ async deleteIssue(index) {
   } 
   ```
   
+  ---
+  
   ## BOOTSTRAP implementation thoughts
 
   
