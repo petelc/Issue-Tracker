@@ -8,6 +8,7 @@ import React from 'react';
 import URLSearchParams from 'url-search-params';
 import Card from 'react-bootstrap/Card';
 import Pagination from 'react-bootstrap/Pagination';
+import Button from 'react-bootstrap/Button';
 import { LinkContainer } from 'react-router-bootstrap';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
@@ -169,8 +170,28 @@ class IssueList extends React.Component {
         newList.splice(index, 1);
         return { issues: newList };
       });
-      showSuccess(`Deleted issue ${id} successfully.`);
+      const undoMessage = (
+        <span>
+          {`Deleted issue ${id} successfully.`}
+          <Button variant="danger" onClick={() => this.restoreIssue(id)}>
+            UNDO
+          </Button>
+        </span>
+      );
+      showSuccess(undoMessage);
     } else {
+      this.loadData();
+    }
+  }
+
+  async restoreIssue(id) {
+    const query = `mutation issueRestore($id: Int!) {
+      issueRestore(id: $id)
+    }`;
+    const { showSuccess, showError } = this.props;
+    const data = await graphQLFetch(query, { id }, showError);
+    if (data) {
+      showSuccess(`Issue ${id} restored successfully.`);
       this.loadData();
     }
   }

@@ -30,7 +30,7 @@ export default class Toasts extends React.Component {
             position: 'fixed',
             bottom: 20,
             left: 20,
-            zIndex: 10,
+            zIndex: 100,
           }}
         >
           <Toast show={showing} onClose={onDismiss}>
