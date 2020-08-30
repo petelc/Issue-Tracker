@@ -16,8 +16,8 @@ import Alert from 'react-bootstrap/Alert';
 import props from 'prop-types';
 // Local Imports
 import graphQLFetch from './graphQLFetch.js';
-import Toasts from './Toasts.jsx';
 import store from './store.js';
+import withToasts from './withToasts.jsx';
 
 function format(num) {
   return num != null ? num.toString() : '';
@@ -28,7 +28,7 @@ function unformat(str) {
   return Number.isNaN(val) ? null : val;
 }
 
-export default class IssueEdit extends React.Component {
+class IssueEdit extends React.Component {
   static async fetchData(match, search, showError) {
     const query = `query issue($id: Int!) {
       issue(id: $id) {
@@ -51,17 +51,11 @@ export default class IssueEdit extends React.Component {
       invalidFields: {},
       value: format(props.value),
       showingValidation: false,
-      toastVisible: false,
-      toastMessage: ' ',
-      toastType: 'success',
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.showValidation = this.showValidation.bind(this);
-    this.showSuccess = this.showSuccess.bind(this);
-    this.showError = this.showError.bind(this);
-    this.dismissToast = this.dismissToast.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onEffortChange = this.onEffortChange.bind(this);
   }
@@ -141,39 +135,19 @@ export default class IssueEdit extends React.Component {
       }`;
 
     const { id, created, ...changes } = issue;
-    const data = await graphQLFetch(query, { changes, id }, this.showError);
+    const { showSuccess, showError } = this.props;
+    const data = await graphQLFetch(query, { changes, id }, showError);
     if (data) {
       this.setState({ issue: data.issueUpdate });
-      this.showSuccess('Updated Issue Successfully');
+      showSuccess('Updated Issue Successfully');
     }
   }
 
   async loadData() {
-    const { match } = this.props;
-    const data = await IssueEdit.fetchData(match, null, this.showError);
+    const { match, showError } = this.props;
+    const data = await IssueEdit.fetchData(match, null, showError);
     this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
-
-  /*
-  async loadData() {
-    const query = `query issue($id: Int!) {
-        issue(id: $id) {
-          id title status owner
-          effort created due description
-        }
-      }`;
-
-    let {
-      match: {
-        params: { id },
-      },
-    } = this.props;
-    id = parseInt(id, 10);
-    const data = await graphQLFetch(query, { id }, this.showError);
-    this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
-  }
-
-  */
 
   showValidation() {
     this.setState({ showingValidation: true });
@@ -181,26 +155,6 @@ export default class IssueEdit extends React.Component {
 
   dismissValidation() {
     this.setState({ showingValidation: false });
-  }
-
-  showSuccess(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'success',
-    });
-  }
-
-  showError(message) {
-    this.setState({
-      toastVisible: true,
-      toastMessage: message,
-      toastType: 'danger',
-    });
-  }
-
-  dismissToast() {
-    this.setState({ toastVisible: false });
   }
 
   render() {
@@ -248,7 +202,6 @@ export default class IssueEdit extends React.Component {
         </Alert>
       );
     }
-    const { toastVisible, toastMessage, toastType } = this.state;
     return (
       <Card>
         <Card.Header>{`Editing issue: ${id}`}</Card.Header>
@@ -425,15 +378,12 @@ export default class IssueEdit extends React.Component {
           {' | '}
           <Link to={`/edit/${id + 1}`}>Next</Link>
         </Card.Footer>
-        <Toasts
-          showing={toastVisible}
-          onDismiss={this.dismissToast}
-          type={toastType}
-        >
-          {toastMessage}
-        </Toasts>
       </Card>
 
     );
   }
 }
+
+const IssueEditWithToasts = withToasts(IssueEdit);
+IssueEditWithToasts.fetchData = IssueEdit.fetchData;
+export default IssueEditWithToasts;

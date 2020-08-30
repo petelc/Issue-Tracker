@@ -3,6 +3,7 @@
 import React from 'react';
 import Toast from 'react-bootstrap/Toast';
 import ToastHeader from 'react-bootstrap/ToastHeader';
+import Collapse from 'react-bootstrap/Collapse';
 
 export default class Toasts extends React.Component {
   componentDidUpdate() {
@@ -23,21 +24,24 @@ export default class Toasts extends React.Component {
     } = this.props;
 
     return (
+      <Collapse in={showing}>
         <div
-            style={{
-              position: 'fixed',
-              bottom: 20,
-              left: 20,
-            }}
+          style={{
+            position: 'fixed',
+            bottom: 20,
+            left: 20,
+            zIndex: 100,
+          }}
         >
-            <Toast show={showing} onClose={onDismiss}>
-                <ToastHeader className="toast-header">
-                    <strong className="mr-auto">Issue Tracker</strong>
-                    <small>just now</small>
-                </ToastHeader>
-                <Toast.Body className="toast-body">{children}</Toast.Body>
-            </Toast>
+          <Toast show={showing} onClose={onDismiss}>
+            <ToastHeader className="toast-header">
+              <strong className="mr-auto">Issue Tracker</strong>
+              <small>just now</small>
+            </ToastHeader>
+            <Toast.Body className="toast-body">{children}</Toast.Body>
+          </Toast>
         </div>
+      </Collapse>
     );
   }
 }

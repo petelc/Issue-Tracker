@@ -7,10 +7,13 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Contents from './Contents.jsx';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
+import Search from './Search.jsx';
 
 function NavBar() {
   return (
@@ -40,6 +43,11 @@ function NavBar() {
           <NavDropdown.Item>Subtraction</NavDropdown.Item>
         </NavDropdown>
       </Nav>
+      <Col sm={5} className="my-1">
+        <Form>
+          <Search />
+        </Form>
+      </Col>
       <Nav className="nav nav-dark bg-dark">
         <IssueAddNavItem />
       </Nav>

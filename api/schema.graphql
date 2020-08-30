@@ -43,16 +43,41 @@ input IssueUpdateInputs {
   description: String
 }
 
+type IssueCounts {
+  owner: String!
+  New: Int
+  Assigned: Int
+  Fixed: Int
+  Closed: Int
+}
+
+type IssueListWithPages {
+  issues: [Issue!]!
+  pages: Int
+}
+
 ##### Top level declarations
 
 type Query {
   about: String!
-  issueList(status: StatusType, effortMin: Int, effortMax: Int): [Issue!]!
+  issueList(
+    status: StatusType, 
+    effortMin: Int, 
+    effortMax: Int,
+    search: String,
+    page: Int = 1
+  ): IssueListWithPages
   issue(id: Int!): Issue!
+  issueCounts(
+    status: StatusType, 
+    effortMin: Int, 
+    effortMax: Int
+  ):[IssueCounts!]!
 }
 type Mutation {
   setAboutMessage(message: String!): String
   issueAdd(issue: IssueInputs!): Issue!
   issueUpdate(id: Int!, changes: IssueUpdateInputs!): Issue!
   issueDelete(id: Int!): Boolean!
+  issueRestore(id: Int!): Boolean!
 }
