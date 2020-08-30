@@ -75,7 +75,7 @@ async deleteIssue(index) {
     
 
 Here is the Author's deleteIssue Function
-
+```Javascript
 async deleteIssue(index) {
     const query = `mutation issueDelete($id: Int!) {
       issueDelete(id: $id)
