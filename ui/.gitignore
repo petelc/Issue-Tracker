@@ -3,3 +3,4 @@ node_modules
 /public/env.js
 package-lock.json
 .eslintrc-old.json
+/src/Config/AuthConfig.js

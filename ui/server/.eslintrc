@@ -5,5 +5,6 @@
     "rules": {
       "no-console": "off",
       "import/extension": "off"
-    }
+    },
+    "parser": "babel-eslint"
   }

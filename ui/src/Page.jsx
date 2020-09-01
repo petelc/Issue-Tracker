@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { LinkContainer } from 'react-router-bootstrap';
+// import { useAuth0 } from '@auth0/auth0-react';
 
 import Contents from './Contents.jsx';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
@@ -20,7 +21,7 @@ import SignInNavItem from './SignInNavItem.jsx';
 
 function NavBar() {
   return (
-    <Navbar fluid className="navbar-expand-lg navbar navbar-dark bg-dark">
+    <Navbar fluid="true" className="navbar-expand-lg navbar navbar-dark bg-dark">
       <Navbar.Brand>Issue Tracker</Navbar.Brand>
       <Nav className="mr-auto nav nav-dark bg-dark">
         <LinkContainer exact to="/">
@@ -75,7 +76,7 @@ export default function Page() {
     <div>
       <NavBar />
       <Row />
-      <Container fluid>
+      <Container fluid="true">
         <div className="spacer" />
         <Contents />
       </Container>
