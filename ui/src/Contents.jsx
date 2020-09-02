@@ -5,6 +5,8 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import routes from './routes.js';
 
+// So to make the protect route stuff I need to remove IssueEdit from routes.js
+// and add in the route below the {routes.map...} line.
 export default function Contents() {
   return (
     <Switch>

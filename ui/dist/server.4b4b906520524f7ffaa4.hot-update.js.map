@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/Auth/Profile.jsx"],"names":[],"mappings":";;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA","file":"server.4b4b906520524f7ffaa4.hot-update.js","sourcesContent":["import React from 'react';\r\nimport Container from 'react-bootstrap/Container';\r\nimport Row from 'react'"],"sourceRoot":""}
