@@ -1,32 +1,29 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
-import Nav from 'react-bootstrap/Nav';
+// import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import NavDropDown from 'react-bootstrap/NavDropdown';
+import Nav from 'react-bootstrap/Nav';
+// import NavDropDown from 'react-bootstrap/NavDropdown';
 import Badge from 'react-bootstrap/Badge';
 import { GoThumbsup } from 'react-icons/go';
+// Bring in the Auth0
+import { withAuth0 } from '@auth0/auth0-react';
+import withToasts from './withToasts.jsx';
+import LoginButton from './Auth/LoginButton.jsx';
+import LogoutButton from './Auth/LogoutButton.jsx';
 
-export default class SignInNavItem extends React.Component {
+class SignInNavItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showing: false,
-      user: { signedIn: false, givenName: '' },
+      // isAuthenticated: withAuth0.isAuthenticated,
+      // user: withAuth0.user,
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.signOut = this.signOut.bind(this);
-    this.signIn = this.signIn.bind(this);
-  }
-
-  signIn() {
-    this.hideModal();
-    this.setState({ user: { signedIn: true, givenName: 'User1' } });
-  }
-
-  signOut() {
-    this.setState({ user: { signedIn: false, givenName: '' } });
   }
 
   showModal() {
@@ -38,50 +35,42 @@ export default class SignInNavItem extends React.Component {
   }
 
   render() {
-    const { user } = this.state;
-    if (user.signedIn) {
+    const AuthNav = () => {
+      const { isAuthenticated } = withAuth0();
+
       return (
-        <NavDropDown title={user.givenName} id="user">
-          <Nav.Link onClick={this.signOut}>
-            Sign Out
-          </Nav.Link>
-        </NavDropDown>
+        <Nav className="justify-content-end">
+          {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+        </Nav>
       );
-    }
+    };
     const { showing } = this.state;
     return (
       <>
         <NavItem onClick={this.showModal} className="bg-dark">
-          <Button variant="btn btn-dark link">
-            Sign In
-            <Badge><GoThumbsup /></Badge>
-          </Button>
+          {AuthNav}
+          <Badge>
+            <GoThumbsup />
+          </Badge>
         </NavItem>
-        <Modal
-          keyboard
-          show={showing}
-          onHide={this.hideModal}
-          size="lg"
-        >
+        <Modal keyboard show={showing} onHide={this.hideModal} size="lg">
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
               Sign In
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Button
-              type="button"
-              variant="dark"
-              onClick={this.signIn}
-            >
-              Sign In
-            </Button>
+            <LoginButton />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="link" onClick={this.hideModal}>Close</Button>
+            <Button variant="link" onClick={this.hideModal}>
+              Close
+            </Button>
           </Modal.Footer>
         </Modal>
       </>
     );
   }
 }
+
+export default withAuth0(withToasts(SignInNavItem));
