@@ -71,11 +71,12 @@ async deleteIssue(index) {
         this.loadData();    
       }    
     }
-    
+```
     
 
-Here is the Author's deleteIssue Function
+**Here is the Author's deleteIssue Function**
 
+```javascript
 async deleteIssue(index) {
     const query = `mutation issueDelete($id: Int!) {
       issueDelete(id: $id)
