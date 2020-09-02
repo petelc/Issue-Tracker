@@ -12,14 +12,24 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { LinkContainer } from 'react-router-bootstrap';
-// import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
+import LoginButton from './Auth/LoginButton.jsx';
+import LogoutButton from './Auth/LogoutButton.jsx';
 
 import Contents from './Contents.jsx';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Search from './Search.jsx';
-import SignInNavItem from './SignInNavItem.jsx';
 
 function NavBar() {
+  const AuthNav = () => {
+    const { isAuthenticated } = useAuth0();
+
+    return (
+      <Nav className="justify-content-end">
+        {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+      </Nav>
+    );
+  };
   return (
     <Navbar fluid="true" className="navbar-expand-lg navbar navbar-dark bg-dark">
       <Navbar.Brand>Issue Tracker</Navbar.Brand>
@@ -52,7 +62,7 @@ function NavBar() {
           <IssueAddNavItem />
         </NavItem>
         <NavItem>
-          <SignInNavItem />
+          <AuthNav />
         </NavItem>
       </Nav>
     </Navbar>
