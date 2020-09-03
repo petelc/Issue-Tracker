@@ -2,142 +2,81 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable linebreak-style */
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-// import '../public/style.css';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import Contents from './Contents.jsx';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  sectionDesktop: {
-    position: 'relative',
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-}));
+import IssueAddNavItem from './IssueAddNavItem.jsx';
+import Search from './Search.jsx';
 
 function NavBar() {
-  const classes = useStyles();
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
-    <div className={classes.root}>
-      <AppBar>
-        <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>
-                <Link to="/">
-                    <Button>
-                        Home
-                    </Button>
-                </Link>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-            <Link to="/#/issues">
-                    <Button color="secondary">
-                        Issues List
-                    </Button>
-                </Link>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-                <Link to="/report">
-                    <Button color="primary">
-                        Reports
-                    </Button>
-                </Link>
-            </MenuItem>
-          </Menu>
-          <Typography className = {classes.title } variant="h6" color="inherit">
-            Issue Tracker
-          </Typography>
-          <div className={classes.root}>
-            <div className={classes.sectionDesktop}>
-                <nav>
-                    <Link to="/">
-                        <Button color="secondary">
-                            Home
-                        </Button>
-                    </Link>
-                    {' | '}
-                    <Link to="/#/issues">
-                        <Button color="secondary">
-                            Issues List
-                        </Button>
-                    </Link>
-                    {' | '}
-                    <Link to="/report">
-                        <Button color="secondary">
-                            Reports
-                        </Button>
-                    </Link>
-                </nav>
-            </div>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <Navbar className="navbar-expand-lg navbar navbar-dark bg-dark">
+      <Navbar.Brand>Issue Tracker</Navbar.Brand>
+      <Nav className="mr-auto nav nav-dark bg-dark">
+        <LinkContainer exact to="/">
+          <Nav.Link>Home</Nav.Link>
+        </LinkContainer>
+        <LinkContainer to="/issues">
+          <Nav.Link>Issue List</Nav.Link>
+        </LinkContainer>
+        <LinkContainer to="/report">
+          <Nav.Link>Report</Nav.Link>
+        </LinkContainer>
+        <LinkContainer to="/about">
+          <Nav.Link>About</Nav.Link>
+        </LinkContainer>
+        <NavDropdown
+          id="user-dropdown"
+          title="More"
+          className="dropdown-menu-lg-right"
+          size="lg"
+        >
+          <NavDropdown.Item>Action</NavDropdown.Item>
+          <NavDropdown.Item>Reaction</NavDropdown.Item>
+          <NavDropdown.Item>Subtraction</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+      <Col sm={5} className="my-1">
+        <Form>
+          <Search />
+        </Form>
+      </Col>
+      <Nav className="nav nav-dark bg-dark">
+        <IssueAddNavItem />
+      </Nav>
+    </Navbar>
+  );
+}
+
+function Footer() {
+  return (
+    <small>
+      <p className="text-center">
+        Full Source Code available at this
+        {' '}
+        <a href="https://github.com/petelc/Issue-Tracker">GitHub Repository</a>
+      </p>
+    </small>
   );
 }
 
 export default function Page() {
   return (
-        <div className="adj">
-            <NavBar/>
-            <Contents />
-        </div>
+    <div>
+      <NavBar />
+      <Row />
+      <Container fluid>
+        <div className="spacer" />
+        <Contents />
+      </Container>
+      <Footer />
+    </div>
   );
 }

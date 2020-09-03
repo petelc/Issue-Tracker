@@ -1,123 +1,255 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable linebreak-style */
 /* eslint-disable import/no-cycle */
-/* eslint-disable linebreak-style */
 /* eslint-disable import/no-named-as-default-member */
-/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
-/* eslint-disable linebreak-style */
 /* eslint "react/jsx-no-undef": "off" */
 import React from 'react';
-import { Route } from 'react-router-dom';
 import URLSearchParams from 'url-search-params';
-import CssBaseLine from '@material-ui/core/CssBaseline';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-// import DenseAppBar from './DenseAppBar.jsx';
-// eslint-disable-next-line import/no-named-as-default
+import Card from 'react-bootstrap/Card';
+import Pagination from 'react-bootstrap/Pagination';
+import Button from 'react-bootstrap/Button';
+import { LinkContainer } from 'react-router-bootstrap';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
-import IssueAdd from './IssueAdd.jsx';
 import IssueDetail from './IssueDetail.jsx';
-import graphQLFetch from './graphQLFetch';
+import graphQLFetch from './graphQLFetch.js';
+import store from './store.js';
+import withToasts from './withToasts.jsx';
 
-const styles = {
-  root: {
-    margin: 20,
-    padding: 10,
-  },
-};
+const SECTION_SIZE = 5;
 
-// TO DO: I need to change the way Material UI Styles are brought in
-// Look at other components for guidance
-export default withStyles(styles)(
-  class IssueList extends React.Component {
-    constructor() {
-      super();
-      this.state = { issues: [] };
-      this.createIssue = this.createIssue.bind(this);
+function PageLink({
+  params, page, activePage, children,
+}) {
+  params.set('page', page);
+  if (page === 0) return React.cloneElement(children, { disabled: true });
+  return (
+    <LinkContainer
+      isActive={() => page === activePage}
+      to={{ search: `?${params.toString()}` }}
+    >
+      {children}
+    </LinkContainer>
+  );
+}
+
+class IssueList extends React.Component {
+  static async fetchData(match, search, showError) {
+    const params = new URLSearchParams(search);
+    const vars = { hasSelection: false, selectedId: 0 };
+    if (params.get('status')) vars.status = params.get('status');
+
+    const effortMin = parseInt(params.get('effortMin'), 10);
+    if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+    const effortMax = parseInt(params.get('effortMax'), 10);
+    if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+
+    const { params: { id } } = match;
+    const idInt = parseInt(id, 10);
+    if (!Number.isNaN(idInt)) {
+      vars.hasSelection = true;
+      vars.selectedId = idInt;
     }
 
-    componentDidMount() {
-      this.loadData();
-    }
+    let page = parseInt(params.get('page'), 10);
+    if (Number.isNaN(page)) page = 1;
+    vars.page = page;
 
-    componentDidUpdate(prevProps) {
-      const { location: { search: prevSearch } } = prevProps;
-      const { location: { search } } = this.props;
-      if (prevSearch !== search) {
-        this.loadData();
-      }
-    }
-
-    // Handle the querystring param here for Issue Filter
-    async loadData() {
-      const { location: { search } } = this.props;
-      const params = new URLSearchParams(search);
-      const vars = {};
-      if (params.get('status')) vars.status = params.get('status');
-
-      // Adding in effortMin and effortMax parameters
-      const effortMin = parseInt(params.get('effortMin'), 10);
-      if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
-      const effortMax = parseInt(params.get('effortMax'), 10);
-      if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
-      const query = `query issueList(
-        $status: StatusType
-        $effortMin: Int
-        $effortMax: Int
-        ) {
-        issueList (
-          status: $status
-          effortMin: $effortMin
-          effortMax: $effortMax
-          ) {
+    const query = `query issueList(
+      $status: StatusType
+      $effortMin: Int
+      $effortMax: Int
+      $hasSelection: Boolean!
+      $selectedId: Int!
+      $page: Int!
+    ) {
+      issueList(
+        status: $status
+        effortMin: $effortMin
+        effortMax: $effortMax
+        page: $page
+      ) {
+        issues {
           id title status owner
           created effort due
         }
+        pages
+      }
+      issue(id: $selectedId) @include (if : $hasSelection) {
+        id description
+      }
+    }`;
+
+    const data = await graphQLFetch(query, vars, showError);
+    return data;
+  }
+
+  constructor() {
+    super();
+    // const issues = store.initialData ? store.initialData.issueList.issues : null;
+    // const selectedIssue = store.initialData ? store.initialData.issue : null;
+    const initialData = store.initialData || { issueList: {} };
+    const {
+      issueList: { issues, pages }, issue: selectedIssue,
+    } = initialData;
+    delete store.initialData;
+    this.state = {
+      issues,
+      selectedIssue,
+      pages,
+    };
+    this.closeIssue = this.closeIssue.bind(this);
+    this.deleteIssue = this.deleteIssue.bind(this);
+  }
+
+  componentDidMount() {
+    const { issues } = this.state;
+    if (issues == null) this.loadData();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      location: { search: prevSearch },
+      match: { params: { id: prevId } },
+    } = prevProps;
+    const { location: { search }, match: { params: { id } } } = this.props;
+    if (prevSearch !== search || prevId !== id) {
+      this.loadData();
+    }
+  }
+
+  async loadData() {
+    const { location: { search }, match, showError } = this.props;
+    const data = await IssueList.fetchData(match, search, showError);
+    if (data) {
+      this.setState({
+        issues: data.issueList.issues,
+        selectedIssue: data.issue,
+        pages: data.issueList.pages,
+      });
+    }
+  }
+
+  async closeIssue(index) {
+    const query = `mutation issueClose($id: Int!) {
+        issueUpdate(id: $id, changes: { status: Closed }) {
+          id title status owner
+          effort created due description
+        }
       }`;
-
-      const data = await graphQLFetch(query, vars);
-      if (data) {
-        this.setState({ issues: data.issueList });
-      }
+    const { issues } = this.state;
+    const { showError } = this.props;
+    const data = await graphQLFetch(query, { id: issues[index].id }, showError);
+    if (data) {
+      this.setState((prevState) => {
+        const newList = [...prevState.issues];
+        newList[index] = data.issueUpdate;
+        return { issues: newList };
+      });
+    } else {
+      this.loadData();
     }
+  }
 
-    async createIssue(issue) {
-      const query = `mutation issueAdd($issue: IssueInputs!) {
-          issueAdd(issue: $issue) {
-            id
-          }
-        }`;
-
-      const data = await graphQLFetch(query, { issue });
-      if (data) {
-        this.loadData();
-      }
-    }
-
-    render() {
-      const { issues } = this.state;
-      // eslint-disable-next-line react/prop-types
-      const { classes } = this.props;
-      const { match } = this.props;
-      return (
-        <React.Fragment>
-          <CssBaseLine />
-          <div>
-            <Paper className={classes.root}>
-              <h1>Issue Tracker</h1>
-              <hr />
-              <IssueFilter />
-              <hr />
-              <IssueTable issues={issues} />
-              <hr />
-              <IssueAdd createIssue={this.createIssue} />
-              <hr />
-              <Route path={`${match.path}/:id`} component={IssueDetail} />
-            </Paper>
-          </div>
-        </React.Fragment>
+  async deleteIssue(index) {
+    const query = `mutation issueDelete($id: Int!) {
+      issueDelete(id: $id)
+    }`;
+    const { issues } = this.state;
+    const { location: { pathname, search }, history } = this.props;
+    const { showSuccess, showError } = this.props;
+    const { id } = issues[index];
+    const data = await graphQLFetch(query, { id }, showError);
+    if (data && data.issueDelete) {
+      this.setState((prevState) => {
+        const newList = [...prevState.issues];
+        if (pathname === `/issues/${id}`) {
+          history.push({ pathname: '/issues', search });
+        }
+        newList.splice(index, 1);
+        return { issues: newList };
+      });
+      const undoMessage = (
+        <span>
+          {`Deleted issue ${id} successfully.`}
+          <Button variant="danger" onClick={() => this.restoreIssue(id)}>
+            UNDO
+          </Button>
+        </span>
       );
+      showSuccess(undoMessage);
+    } else {
+      this.loadData();
     }
-  },
-);
+  }
+
+  async restoreIssue(id) {
+    const query = `mutation issueRestore($id: Int!) {
+      issueRestore(id: $id)
+    }`;
+    const { showSuccess, showError } = this.props;
+    const data = await graphQLFetch(query, { id }, showError);
+    if (data) {
+      showSuccess(`Issue ${id} restored successfully.`);
+      this.loadData();
+    }
+  }
+
+  render() {
+    const { issues } = this.state;
+    if (issues == null) return null;
+    const { selectedIssue, pages } = this.state;
+    const { location: { search } } = this.props;
+
+    const params = new URLSearchParams(search);
+    let page = parseInt(params.get('page'), 10);
+    if (Number.isNaN(page)) page = 1;
+
+    const startPage = Math.floor((page - 1) / SECTION_SIZE) * SECTION_SIZE + 1;
+    const endPage = startPage + SECTION_SIZE - 1;
+    const prevSection = startPage === 1 ? 0 : startPage - SECTION_SIZE;
+    const nextSection = endPage >= pages ? 0 : startPage + SECTION_SIZE;
+
+    const items = [];
+    for (let i = startPage; i <= Math.min(endPage, pages); i += 1) {
+      params.set('page', 1);
+      items.push((
+        <PageLink key={i} params={params} activePage={page} page={i}>
+          <Pagination.Item>{i}</Pagination.Item>
+        </PageLink>
+      ));
+    }
+    return (
+      <>
+        <Card className="text-left bg-dark text-white">
+          <Card.Header><h5>Filter</h5></Card.Header>
+          <Card.Body>
+            <IssueFilter urlBase="/issues" />
+          </Card.Body>
+        </Card>
+        <div className="spacer" />
+        <IssueTable
+          issues={issues}
+          closeIssue={this.closeIssue}
+          deleteIssue={this.deleteIssue}
+        />
+        <div className="spacer" />
+        <IssueDetail issue={selectedIssue} />
+        <Pagination>
+          <PageLink params={params} page={prevSection}>
+            <Pagination.Item>{'<'}</Pagination.Item>
+          </PageLink>
+          {items}
+          <PageLink params={params} page={nextSection}>
+            <Pagination.Item>{'>'}</Pagination.Item>
+          </PageLink>
+        </Pagination>
+      </>
+    );
+  }
+}
+
+const IssueListWithToasts = withToasts(IssueList);
+IssueListWithToasts.fetchData = IssueList.fetchData;
+export default withToasts(IssueList);

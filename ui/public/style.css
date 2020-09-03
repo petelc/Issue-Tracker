@@ -1,15 +1,25 @@
-h1 {
-  font-style: italic;
-  font-size: 72px;
-  color: black;
+pre {
+  padding: 20px;
 }
-table.bordered-table th,
-td {
-  border: 1px solid silver;
-  padding: 4px;
+
+
+.text-area {
+  padding: 20px;
+  font-family: Roboto;
+  font-size: 16px;
+  border-radius: 4px;
+  border-color: #80bdff;
+  box-shadow: "0 0 0 0.2rem rgba(0,123,255,.25)";
 }
-table.bordered-table {
-  border-collapse: collapse;
+
+.toast-header {
+  background-color: #318fb5;
+  color: #fff;
+}
+
+.toast-body {
+  background-color: #fff;
+  color: #4b5d67;
 }
 
 .masterContainer {
@@ -25,23 +35,18 @@ table.bordered-table {
   color: white;
 }
 
-select {
-  margin: 1px;
-  padding: 10px 26px 10px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-family: Roboto;
-  font-size: 16px;
-}
-select:hover {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
-select option {
-  padding: 3px;
-}
-
 .alignmentModel {
   padding: 20px;
   vertical-align: middle;
+}
+
+.spacer {
+  padding: 20px;
+  height: 2px;
+}
+
+.toast {
+  position: 'fixed';
+  bottom: 20;
+  left: 20;
 }

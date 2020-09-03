@@ -20,8 +20,13 @@
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
+<<<<<<< HEAD
     "mongodb": "^3.6.1",
     "nodemon": "^1.19.4"
+=======
+    "mongodb": "^3.6.0",
+    "nodemon": "^2.0.4"
+>>>>>>> dc5737713deb71f95ef18a7248a265e826272c2c
   },
   "devDependencies": {
     "eslint": "^5.16.0",
