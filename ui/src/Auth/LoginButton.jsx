@@ -4,12 +4,11 @@ import Button from 'react-bootstrap/Button';
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
-
   return (
     <Button
+      onClick={() => loginWithRedirect()}
       variant="btn btn-dark link"
       className="btn-margin"
-      onClick={() => loginWithRedirect()}
     >
       Log In
     </Button>

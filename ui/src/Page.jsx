@@ -20,16 +20,19 @@ import Contents from './Contents.jsx';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Search from './Search.jsx';
 
-function NavBar() {
-  const AuthNav = () => {
-    const { isAuthenticated } = useAuth0();
+const AuthNav = () => {
+  const { isAuthenticated } = useAuth0();
 
-    return (
-      <Nav className="justify-content-end">
+  return (
+    <Nav className="justify-content-end">
+      <NavItem>
         {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-      </Nav>
-    );
-  };
+      </NavItem>
+    </Nav>
+  );
+};
+
+function NavBar() {
   return (
     <Navbar fluid="true" className="navbar-expand-lg navbar navbar-dark bg-dark">
       <Navbar.Brand>Issue Tracker</Navbar.Brand>
@@ -61,10 +64,8 @@ function NavBar() {
         <NavItem>
           <IssueAddNavItem />
         </NavItem>
-        <NavItem>
-          <AuthNav />
-        </NavItem>
       </Nav>
+      <AuthNav />
     </Navbar>
   );
 }

@@ -17,10 +17,11 @@
   "homepage": "https://github.com/petelc/Issue-Tracker",
   "dependencies": {
     "apollo-server-express": "^2.16.0",
+    "bl": "^4.0.3",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
-    "mongodb": "^3.6.0",
+    "mongodb": "^3.6.1",
     "nodemon": "^2.0.4"
   },
   "devDependencies": {
