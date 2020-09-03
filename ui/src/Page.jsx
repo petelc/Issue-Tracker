@@ -23,7 +23,7 @@ import Search from './Search.jsx';
 function NavBar() {
   const AuthNav = () => {
     const { isAuthenticated } = useAuth0();
-
+    alert(isAuthenticated);
     return (
       <Nav className="justify-content-end">
         {isAuthenticated ? <LogoutButton /> : <LoginButton />}
