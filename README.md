@@ -100,8 +100,19 @@ async deleteIssue(index) {
   } 
   ```
   
-  ---
+---
   
-  ## BOOTSTRAP implementation thoughts
+## BOOTSTRAP implementation thoughts
+
+
+---
+## Authentication
+So I can genuinely say that I found the whole chapter on Authentication to be infuriating. I could not get google authentication to work, just trying to register the application to get the keys was imposible in that it never let me past the first step. So I did try using Auth0 and that was promising but it broke also and by then I was frustrated enough to say #^@& it and move on. I do plan on swinging back around and setting up some type of authentication, currently i am looking at using Passport and Github strategy. 
+
+---
+## Final Thoughts
+So I know i need to go back and do some more write up about my experiences working through this book but right now I am "happy" with where I am with this. I have deployed the application to Heroku but I don't know how long i will leave it running. If you have any thoughts or questions please reach out. 
+
+Find Peace and Stay Safe!
 
   
